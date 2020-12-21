@@ -1,0 +1,28 @@
+# Configuration
+.env*
+
+# Data
+data/processed
+data/raw
+*.pickle
+
+# Python
+__pycache__
+.pytest_cache
+.ipynb_checkpoints
+venv
+
+# Weights & Biases
+wandb
+
+# PyTorch Lightning
+lightning_logs
+
+# VS Code
+*.code-workspace
+
+# Vim
+*.swp
+
+# Misc
+.DS_Store
