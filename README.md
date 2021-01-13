@@ -1,5 +1,7 @@
 # Deep learning-based lung cancer detection
 
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/felixpeters/lung-cancer-detection/app/app.py)
+
 ## Dataset
 
 The LIDC-IDRI dataset is used for training all models.
