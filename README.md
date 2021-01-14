@@ -2,6 +2,19 @@
 
 [![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/felixpeters/lung-cancer-detection/app/app.py)
 
+## Inspiration
+
+> With an estimated 160,000 deaths in 2018, lung cancer is the most common cause of cancer death in the United States (Ardila et al. 2019).
+
+> Lung cancer is one of the most prevalent cancers worldwide, causing 1.76 million deaths per year (Yu et al. 2020).
+
+Clinical decision support systems have been developed to enable early diagnosis of lung cancer from CT images.
+However, most of these tools are limited to lung or nodule segmentation, leaving classifation of nodules to the radiologist.
+Early research shows that deep learning models can support with this task as well.
+Integrating these research efforts into clinical applications is an active area of development.
+See the [Arterys Marketplace](https://marketplace.arterys.com/) for examples of lung cancer detection models, some of which are currently under review for FDA or CE approval.
+This project constitutes a design study of how a deep learning-based lung cancer detection app could look like.
+
 ## Dataset
 
 The LIDC-IDRI dataset is used for training all models.
@@ -13,6 +26,10 @@ Model training:
 
 - [ ] Preprocess LIDC dataset
 - [ ] Train baseline model
+
+Random ideas:
+
+- Apply TCAV algorithm to trained model, use additional annotations as concepts
 
 ## References
 
