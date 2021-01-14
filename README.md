@@ -18,7 +18,7 @@ Model training:
 
 ### Materials
 
-PyTorch Lightning.
+PyTorch Lightning:
 
 - [Docs](https://pytorch-lightning.readthedocs.io/en/stable/)
 
