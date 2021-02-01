@@ -22,7 +22,7 @@ It can be accessed via the [Cancer Imaging Archive](https://wiki.cancerimagingar
 
 ## Roadmap
 
-Model training:
+Nodule detection model:
 
 - [ ] Preprocess LIDC dataset
 - [ ] Train baseline model
@@ -46,8 +46,10 @@ Monai (PyTorch-based library for medical imaging):
 
 Preprocessing of LIDC-IDRI dataset:
 
-- [Older base repo](https://github.com/mikejhuang/LungNoduleDetectionClassification) 
-- [More recent repo](https://github.com/jaeho3690/LIDC-IDRI-Preprocessing)
+- [Repo that contains useful code](https://github.com/jaeho3690/LIDC-IDRI-Preprocessing)
+  - Well documented
+  - Creates masks from raw DICOM files
+  - [Based on this repo](https://github.com/mikejhuang/LungNoduleDetectionClassification)
 
 Lung cancer detection datasets:
 
