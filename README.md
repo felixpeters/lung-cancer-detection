@@ -35,6 +35,10 @@ Random ideas:
 
 ### Materials
 
+Basics of CT images:
+  - [Windowing](https://radiopaedia.org/articles/windowing-ct)
+  - [Hounsfield unit](https://radiopaedia.org/articles/hounsfield-unit)
+
 PyTorch Lightning:
 
 - [Docs](https://pytorch-lightning.readthedocs.io/en/stable/)
@@ -43,13 +47,27 @@ Monai (PyTorch-based library for medical imaging):
 
 - [Docs](https://docs.monai.io/en/latest/)
 - [MONAI Bootcamp YT playlist](https://www.youtube.com/playlist?list=PLtoSVSQ2XzyBro_Xs12cyerrGz4pEPylv)
+- [Feature highlights](https://docs.monai.io/en/latest/highlights.html)
+- [3D segmentation examples](https://github.com/Project-MONAI/tutorials/blob/master/3d_segmentation/spleen_segmentation_3d.ipynb)
+- [DICOM loading example](https://github.com/Project-MONAI/tutorials/blob/master/modules/load_medical_images.ipynb)
 
 Preprocessing of LIDC-IDRI dataset:
 
-- [Repo that contains useful code](https://github.com/jaeho3690/LIDC-IDRI-Preprocessing)
+
+Preprocessing of DICOM images:
+
+- [DICOM Standard Browser](https://dicom.innolitics.com/ciods)
+  - Useful for looking up meta data specification
+- [Preprocessing code for LIDC dataset](https://github.com/jaeho3690/LIDC-IDRI-Preprocessing)
   - Well documented
   - Creates masks from raw DICOM files
   - [Based on this repo](https://github.com/mikejhuang/LungNoduleDetectionClassification)
+- Notebook series by Jeremy Howard
+  - [Creating a metadata DataFrame](https://www.kaggle.com/jhoward/creating-a-metadata-dataframe-fastai)
+  - [Some DICOM gotchas to be aware of](https://www.kaggle.com/jhoward/some-dicom-gotchas-to-be-aware-of-fastai/notebook)
+  - [Don't see like a radiologist!](https://www.kaggle.com/jhoward/don-t-see-like-a-radiologist-fastai/notebook)
+  - [Cleaning the data for rapid prototyping](https://www.kaggle.com/jhoward/cleaning-the-data-for-rapid-prototyping-fastai/notebook)
+- [Preprocessing of DSB 2017 dataset](https://www.kaggle.com/gzuidhof/full-preprocessing-tutorial)
 
 Lung cancer detection datasets:
 
