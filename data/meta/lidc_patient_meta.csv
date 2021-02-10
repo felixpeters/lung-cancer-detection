@@ -1,0 +1,158 @@
+PatientID,Diagnosis,DiagnosisMethod,PrimaryTumorSiteMetastaticDisease
+LIDC-IDRI-0068,3,4,Head & Neck Cancer
+LIDC-IDRI-0071,3,1,Head & Neck 
+LIDC-IDRI-0072,2,4,Lung Cancer
+LIDC-IDRI-0088,3,0,Uterine Cancer
+LIDC-IDRI-0090,2,3,NSCLC
+LIDC-IDRI-0091,3,4,urothelial carcinoma
+LIDC-IDRI-0100,3,1,Testis 
+LIDC-IDRI-0118,3,0,Prostate 
+LIDC-IDRI-0124,3,2,colon cancer
+LIDC-IDRI-0129,3,4,colon
+LIDC-IDRI-0135,3,4,Metastatic colon cancer
+LIDC-IDRI-0137,3,3, Basaloid squamous carcinoma
+LIDC-IDRI-0138,2,2,Lung Cancer
+LIDC-IDRI-0143,3,3,osteosarcoma
+LIDC-IDRI-0149,1,1,chondrosarcoma
+LIDC-IDRI-0159,3,2,thyroid carcinoma
+LIDC-IDRI-0161,3,2,pancreatic cancer
+LIDC-IDRI-0162,1,1,gallbladder
+LIDC-IDRI-0163,2,2,non small cell lung
+LIDC-IDRI-0164,3,3,colorectal cancer
+LIDC-IDRI-0165,3,4,vaginal cancer
+LIDC-IDRI-0166,2,2,stage III lung cancer
+LIDC-IDRI-0167,1,1,LGL (T cell lymphoma)
+LIDC-IDRI-0168,1,3,"organizing pneumonia, also leukemia"
+LIDC-IDRI-0169,3,4,granular cell tumor of the trachea
+LIDC-IDRI-0171,1,1,Lymphoma
+LIDC-IDRI-0173,0,0,bladder
+LIDC-IDRI-0174,2,3,nonsmall cell lung cancer
+LIDC-IDRI-0175,3,2,thyroid carcinoma
+LIDC-IDRI-0176,0,0,nonsmall cell lung cancer
+LIDC-IDRI-0178,1,1,melanoma
+LIDC-IDRI-0179,3,2,nonsmall cell lung cancer
+LIDC-IDRI-0180,1,1,LGL (T cell lymphoma)
+LIDC-IDRI-0181,3,2,adenoid cystic carcinoma
+LIDC-IDRI-0182,3,4,lung cancer
+LIDC-IDRI-0183,1,2,Pulmonary cryptococcosis
+LIDC-IDRI-0184,3,4,Ewing sarcoma
+LIDC-IDRI-0185,1,1,HCC
+LIDC-IDRI-0186,2,2,nonsmall cell lung cancer
+LIDC-IDRI-0187,1,3,"organizing pneumonia, also leukemia"
+LIDC-IDRI-0188,3,4,ovarian cancer
+LIDC-IDRI-0189,3,2,renal cell carcinoma
+LIDC-IDRI-0190,3,2,giant cell tumor
+LIDC-IDRI-0191,2,2,lung cancer
+LIDC-IDRI-0192,3,2,metastatic rectal cancer
+LIDC-IDRI-0193,3,3,colon cancer
+LIDC-IDRI-0194,3,2,lung cancer
+LIDC-IDRI-0197,1,1,Colon
+LIDC-IDRI-0198,0,0,lung cancer
+LIDC-IDRI-0200,3,2,Small cell osteosarcoma
+LIDC-IDRI-0202,3,4,testicular cancer 
+LIDC-IDRI-0203,2,2,"non small cell lung, lymphoma"
+LIDC-IDRI-0205,1,1,Left chest wall chondrosarcoma
+LIDC-IDRI-0207,3,2,metastatic melanoma
+LIDC-IDRI-0210,3,2,rectal cancer
+LIDC-IDRI-0211,2,2,NSCLC
+LIDC-IDRI-0212,1,1,Breast cancer
+LIDC-IDRI-0213,0,0,mycosis fungoides
+LIDC-IDRI-0214,2,3,non small cell lung 
+LIDC-IDRI-0217,0,0,lymphoma
+LIDC-IDRI-0220,3,3,colorectal cancer
+LIDC-IDRI-0221,0,0,colon cancer
+LIDC-IDRI-0222,0,0,melanoma
+LIDC-IDRI-0223,3,2,lung cancer
+LIDC-IDRI-0224,0,0,liposarcoma
+LIDC-IDRI-0225,1,4,leukemia
+LIDC-IDRI-0226,0,0,prostate
+LIDC-IDRI-0230,0,0,breast cancer
+LIDC-IDRI-0231,0,0,rectal
+LIDC-IDRI-0232,0,0,cervix
+LIDC-IDRI-0233,1,1,Medullary thyroid cancer
+LIDC-IDRI-0234,1,1,renal cell carcinoma
+LIDC-IDRI-0235,0,0,leukemia
+LIDC-IDRI-0236,3,4,rhabdomyosarcoma
+LIDC-IDRI-0237,3,3,Leiomyosarcoma
+LIDC-IDRI-0239,3,4,carcinoid
+LIDC-IDRI-0242,2,2,non small cell lung
+LIDC-IDRI-0243,0,0,"prostate, lymphoma"
+LIDC-IDRI-0244,3,3,Left Femur Chondrosarcoma
+LIDC-IDRI-0245,0,0,tongue squamous
+LIDC-IDRI-0246,1,1,mantle cell lymphoma
+LIDC-IDRI-0247,1,1,rectal neuroendocrine
+LIDC-IDRI-0248,0,0,melanoma
+LIDC-IDRI-0249,2,3,non small cell lung
+LIDC-IDRI-0250,3,3,laryngeal 
+LIDC-IDRI-0251,0,0,breast
+LIDC-IDRI-0252,3,2,neck - squamous
+LIDC-IDRI-0253,1,4,head and neck squamous cancer
+LIDC-IDRI-0254,3,3,melanoma
+LIDC-IDRI-0255,3,3,colon cancer
+LIDC-IDRI-0256,1,1,"colon cancer, lung cancer"
+LIDC-IDRI-0257,1,4,Hodgkin's lymphoma 
+LIDC-IDRI-0258,3,2,Non small cell lung left lower lobe
+LIDC-IDRI-0260,3,2,nonsmall cell lung cancer
+LIDC-IDRI-0261,0,0,mandible squamous
+LIDC-IDRI-0264,3,3,Melanoma 
+LIDC-IDRI-0265,2,2,lung cancer
+LIDC-IDRI-0266,3,2,Breast cancer
+LIDC-IDRI-0267,2,3,non small cell lung
+LIDC-IDRI-0268,1,1,leiomyosarcoma
+LIDC-IDRI-0270,1,1,mantle cell lymphoma
+LIDC-IDRI-0271,2,2,nonsmall cell lung cancer
+LIDC-IDRI-0272,3,2,Melanoma
+LIDC-IDRI-0273,1,1,primary breast cancer
+LIDC-IDRI-0274,3,2,Breast Ca and RCC
+LIDC-IDRI-0275,1,1,Tonsil cancer
+LIDC-IDRI-0276,1,1,esophageal lesion
+LIDC-IDRI-0277,1,1,multiple primary cancers
+LIDC-IDRI-0278,0,0,endometrial cancer
+LIDC-IDRI-0279,1,1,Lymphoma
+LIDC-IDRI-0280,0,0,CLL
+LIDC-IDRI-0281,0,0,lymphoma
+LIDC-IDRI-0282,0,0,skin non-melanoma
+LIDC-IDRI-0283,1,1,lymphoma
+LIDC-IDRI-0285,3,3,melanoma
+LIDC-IDRI-0286,1,1,uterus leiomyosarcoma
+LIDC-IDRI-0287,0,0,breast
+LIDC-IDRI-0288,0,0,glioblastoma
+LIDC-IDRI-0289,1,3,"solitary fibrous tumor, also with renal ca"
+LIDC-IDRI-0290,2,3,carcinoid lung
+LIDC-IDRI-0314,2,2,adenocarcinoma
+LIDC-IDRI-0325,2,2,squamous cell carcinoma/non-small cell
+LIDC-IDRI-0332,2,3,RUL
+LIDC-IDRI-0377,2,3,LUL adeno CA Stage 1A
+LIDC-IDRI-0385,2,3,T1N0M0 stage 1A
+LIDC-IDRI-0399,1,1,cervical cancer
+LIDC-IDRI-0405,1,2,reactive mesothelial cells
+LIDC-IDRI-0454,2,2,non-small cell carcinoma
+LIDC-IDRI-0470,2,2,nonsmall cell lung cancer
+LIDC-IDRI-0493,2,3,RLL T2N0M1 adeno ca
+LIDC-IDRI-0510,1,2,focal fibrosis
+LIDC-IDRI-0522,2,2,Adenocarcinoma
+LIDC-IDRI-0543,2,2,small cell carcinoma
+LIDC-IDRI-0559,1,1,Neuroendocrine cancer
+LIDC-IDRI-0562,2,3,adenocarcinoma
+LIDC-IDRI-0568,2,3,RUL stage 2B NSCLC
+LIDC-IDRI-0576,0,2,reactive mesothelial cells
+LIDC-IDRI-0580,2,3,"R Squamous cell, stage 3A"
+LIDC-IDRI-0610,2,3,RUL Squamous cell stage 1A
+LIDC-IDRI-0624,1,3,Histoplasmosis with necrotizing granulomas
+LIDC-IDRI-0766,2,2,non-small cell carcinoma
+LIDC-IDRI-0771,2,2,squamous cell carcinoma
+LIDC-IDRI-0772,3,2,esophageal carcinoma
+LIDC-IDRI-0811,2,3,Adenocarcinoma
+LIDC-IDRI-0818,0,0,breast cancer
+LIDC-IDRI-0875,2,3,Adenocarcinoma
+LIDC-IDRI-0893,3,3,recurrent/metastatic
+LIDC-IDRI-0905,2,3, RLL NSCLC stage 1A
+LIDC-IDRI-0921,2,2,small cell carcinoma
+LIDC-IDRI-0924,2,3,poorly differentiated adenocarcinoma
+LIDC-IDRI-0939,2,3,RUL Small cell
+LIDC-IDRI-0965,2,3,Adenocarcinoma
+LIDC-IDRI-0994,2,3,LUL Large cell CA
+LIDC-IDRI-1002,2,2,non-small cell carcinoma
+LIDC-IDRI-1004,2,3,LUL NSCLC
+LIDC-IDRI-1010,0,0,lymphoma
+LIDC-IDRI-1011,3,2,small-cell carcinoma of the tongue
