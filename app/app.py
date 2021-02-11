@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from functools import reduce
 
 import streamlit as st
 import pandas as pd
@@ -20,6 +21,13 @@ def load_raw_img(pid):
     img = np.load(DATA_DIR/pid/"scan.npy")
     return img
 
+@st.cache
+def load_mask(pid):
+    fnames = sorted((DATA_DIR/pid).glob('*_mask.npy'))
+    masks = [np.load(fname) for fname in fnames]
+    mask = reduce(np.logical_or, masks)
+    return mask
+
 @st.cache(suppress_st_warning=True)
 def get_img_slice(img, z, window=(-600, 1500)):
     # clip pixel values to desired window
@@ -34,11 +42,18 @@ def get_img_slice(img, z, window=(-600, 1500)):
     pil_img = Image.fromarray(np.uint8(cm.gray(img_slice)*255))
     return pil_img
 
+@st.cache
+def get_mask_slice(mask, z):
+    mask_slice = (mask[:,:,z]*255).astype(np.uint8)
+    mask_img = Image.fromarray(mask_slice, mode='L')
+    return mask_img
+
 scan_df, nod_df = load_meta()
 scan = scan_df.iloc[0]
 pid = scan.PatientID
 
 img_arr = load_raw_img(pid)
+mask_arr = load_mask(pid)
 
 st.header("Selected case for lung cancer detection application")
 
@@ -51,6 +66,7 @@ st.write("**Diagnosis method:**", "Biopsy")
 st.subheader(f"CT scan")
 
 img_placeholder = st.empty()
+mask_placeholder = st.empty()
 
 col1, col2 = st.beta_columns(2)
 
@@ -68,7 +84,9 @@ with col2:
     width = st.number_input("Window width:", value=1500)
 
 img = get_img_slice(img_arr, z-1, window=(level, width))
+mask = get_mask_slice(mask_arr, z-1)
 img_placeholder.image(img, use_column_width=True)
+mask_placeholder.image(mask, use_column_width=True)
 
 st.subheader("Detected nodules")
 
