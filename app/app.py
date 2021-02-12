@@ -103,5 +103,7 @@ else:
 
 st.subheader("Detected nodules")
 
+st.write("See [this page](https://pylidc.github.io/annotation.html) for information about the coding scheme.")
+
 nodules = nod_df.iloc[:, 2:]
 st.write(nodules)
