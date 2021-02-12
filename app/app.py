@@ -52,7 +52,7 @@ def get_overlay():
 
 @st.cache
 def get_mask_slice(mask, z):
-    mask_slice = (mask[:,:,z]*255).astype(np.uint8)
+    mask_slice = (mask[:,:,z]*96).astype(np.uint8)
     mask_img = Image.fromarray(mask_slice, mode='L')
     return mask_img
 
@@ -86,7 +86,7 @@ with col1:
     st.write(f"{scan.ManufacturerModelName} (by {scan.Manufacturer})")
 
 with col2:
-    overlay_nodules = st.checkbox("Show nodule overlay")
+    overlay_nodules = st.checkbox("Show nodule overlay", value=True)
     z = st.slider("Slice:", min_value=1, max_value=img_arr.shape[2], value=int(img_arr.shape[2]/2))
     level = st.number_input("Window level:", value=-600)
     width = st.number_input("Window width:", value=1500)
