@@ -28,7 +28,7 @@ def load_mask(pid):
     mask = reduce(np.logical_or, masks)
     return mask
 
-@st.cache(suppress_st_warning=True)
+@st.cache(allow_output_mutation=True)
 def get_img_slice(img, z, window=(-600, 1500)):
     # clip pixel values to desired window
     level, width = window
@@ -40,7 +40,15 @@ def get_img_slice(img, z, window=(-600, 1500)):
     # convert to Pillow image for display
     img_slice = img[:,:,z]
     pil_img = Image.fromarray(np.uint8(cm.gray(img_slice)*255))
-    return pil_img
+    return pil_img.convert('RGBA')
+
+@st.cache
+def get_overlay():
+    arr = np.zeros((512, 512, 4)).astype(np.uint8)
+    arr[:,:,1] = 128
+    arr[:,:,3] = 128
+    overlay = Image.fromarray(arr, mode='RGBA')
+    return overlay
 
 @st.cache
 def get_mask_slice(mask, z):
@@ -66,7 +74,6 @@ st.write("**Diagnosis method:**", "Biopsy")
 st.subheader(f"CT scan")
 
 img_placeholder = st.empty()
-mask_placeholder = st.empty()
 
 col1, col2 = st.beta_columns(2)
 
@@ -79,14 +86,20 @@ with col1:
     st.write(f"{scan.ManufacturerModelName} (by {scan.Manufacturer})")
 
 with col2:
+    overlay_nodules = st.checkbox("Show nodule overlay")
     z = st.slider("Slice:", min_value=1, max_value=img_arr.shape[2], value=int(img_arr.shape[2]/2))
     level = st.number_input("Window level:", value=-600)
     width = st.number_input("Window width:", value=1500)
 
 img = get_img_slice(img_arr, z-1, window=(level, width))
-mask = get_mask_slice(mask_arr, z-1)
-img_placeholder.image(img, use_column_width=True)
-mask_placeholder.image(mask, use_column_width=True)
+
+if overlay_nodules:
+    mask = get_mask_slice(mask_arr, z-1)
+    overlay = get_overlay()
+    ct = Image.composite(overlay, img, mask)
+    img_placeholder.image(ct, use_column_width=True)
+else:
+    img_placeholder.image(img, use_column_width=True)
 
 st.subheader("Detected nodules")
 
