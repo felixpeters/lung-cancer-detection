@@ -1,7 +1,11 @@
 # Deep learning-based lung cancer detection
 
-[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/felixpeters/lung-cancer-detection/app/app.py)
-[![Visualize in W&B](https://raw.githubusercontent.com/wandb/assets/main/wandb-github-badge-28.svg)](https://wandb.ai/felixpeters/lung-cancer-detection)
+<a href="https://share.streamlit.io/felixpeters/lung-cancer-detection/app/app.py" rel="nofollow">
+  <img src="https://static.streamlit.io/badges/streamlit_badge_black_white.svg" alt="Open in Streamlit" style="max-width:100%; height: 20px">
+</a>
+<a href="https://wandb.ai/felixpeters/lung-cancer-detection" rel="nofollow">
+  <img src="https://raw.githubusercontent.com/wandb/assets/main/wandb-github-badge-28.svg" alt="Visualize in W&amp;B" style="max-width:100%;height: 20px;">
+</a>
 
 ## Inspiration
 
