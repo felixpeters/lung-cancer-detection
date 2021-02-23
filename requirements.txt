@@ -2,8 +2,10 @@ altair==4.1.0
 appnope==0.1.2
 argon2-cffi==20.1.0
 astor==0.8.1
+astroid==2.5
 async-generator==1.10
 attrs==20.3.0
+autopep8==1.5.5
 backcall==0.2.0
 base58==2.1.0
 bleach==3.2.1
@@ -32,6 +34,7 @@ ipympl==0.6.3
 ipython==7.19.0
 ipython-genutils==0.2.0
 ipywidgets==7.6.3
+isort==5.7.0
 itk==5.1.2
 itk-core==5.1.2
 itk-filtering==5.1.2
@@ -49,8 +52,10 @@ jupyterlab-pygments==0.1.2
 jupyterlab-widgets==1.0.0
 kiwisolver==1.3.1
 kornia==0.4.1
+lazy-object-proxy==1.5.2
 MarkupSafe==1.1.1
 matplotlib==3.3.3
+mccabe==0.6.1
 mistune==0.8.4
 monai==0.4.0
 murmurhash==1.0.5
@@ -75,12 +80,14 @@ prompt-toolkit==3.0.8
 protobuf==3.14.0
 ptyprocess==0.6.0
 pyarrow==2.0.0
+pycodestyle==2.6.0
 pycparser==2.20
 pydantic==1.7.3
 pydeck==0.5.0
 pydicom==2.1.2
 Pygments==2.7.3
 pylidc==0.2.2
+pylint==2.7.0
 pyparsing==2.4.7
 pyrsistent==0.17.3
 python-dateutil==2.8.1
@@ -100,7 +107,7 @@ spacy==3.0.1
 spacy-legacy==3.0.1
 SQLAlchemy==1.3.22
 srsly==2.4.0
-streamlit==0.74.1
+streamlit==0.76.0
 terminado==0.9.1
 testpath==0.4.4
 thinc==8.0.1
@@ -123,4 +130,5 @@ wasabi==0.8.2
 wcwidth==0.2.5
 webencodings==0.5.1
 widgetsnbextension==3.5.1
+wrapt==1.12.1
 xlrd==2.0.1

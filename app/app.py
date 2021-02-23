@@ -10,16 +10,33 @@ from matplotlib import cm
 
 DATA_DIR = Path(__file__).absolute().parent / "data"
 
+
+@st.cache
+def load_ann_codes():
+    codes = {
+        "Malignancy": {
+            1: "Highly Unlikely",
+            2: "Moderately Unlikely",
+            3: "Indeterminate",
+            4: "Moderately Suspicious",
+            5: "Highly Suspicious",
+        },
+    }
+    return codes
+
+
 @st.cache
 def load_meta():
     scan_df = pd.read_csv(DATA_DIR / "scan_meta.csv")
     nod_df = pd.read_csv(DATA_DIR / "nodule_meta.csv")
     return scan_df, nod_df
 
+
 @st.cache
 def load_raw_img(pid):
     img = np.load(DATA_DIR/pid/"scan.npy")
     return img
+
 
 @st.cache
 def load_mask(pid):
@@ -27,6 +44,13 @@ def load_mask(pid):
     masks = [np.load(fname) for fname in fnames]
     mask = reduce(np.logical_or, masks)
     return mask
+
+
+@st.cache
+def load_nodule_img(pid, nid):
+    img = np.load(DATA_DIR/pid/f"nodule_{nid:02d}_vol.npy")
+    return img
+
 
 @st.cache(allow_output_mutation=True)
 def get_img_slice(img, z, window=(-600, 1500)):
@@ -38,23 +62,42 @@ def get_img_slice(img, z, window=(-600, 1500)):
     img_max = img.max()
     img = (img - img_min) / (img_max - img_min)
     # convert to Pillow image for display
-    img_slice = img[:,:,z]
+    img_slice = img[:, :, z]
     pil_img = Image.fromarray(np.uint8(cm.gray(img_slice)*255))
     return pil_img.convert('RGBA')
+
+
+@st.cache(allow_output_mutation=True)
+def get_nod_slice(img, window=(-600, 1500)):
+    # clip pixel values to desired window
+    level, width = window
+    img = np.clip(img, level-(width/2), level+(width/2))
+    # normalize pixel values to 0-1 range
+    img_min = img.min()
+    img_max = img.max()
+    img = (img - img_min) / (img_max - img_min)
+    # convert to Pillow image for display
+    z = int(img.shape[2]/2)
+    img_slice = img[:, :, z]
+    pil_img = Image.fromarray(np.uint8(cm.gray(img_slice)*255))
+    return pil_img.convert('RGBA')
+
 
 @st.cache
 def get_overlay():
     arr = np.zeros((512, 512, 4)).astype(np.uint8)
-    arr[:,:,1] = 128
-    arr[:,:,3] = 128
+    arr[:, :, 1] = 128
+    arr[:, :, 3] = 128
     overlay = Image.fromarray(arr, mode='RGBA')
     return overlay
 
+
 @st.cache
 def get_mask_slice(mask, z):
-    mask_slice = (mask[:,:,z]*96).astype(np.uint8)
+    mask_slice = (mask[:, :, z]*96).astype(np.uint8)
     mask_img = Image.fromarray(mask_slice, mode='L')
     return mask_img
+
 
 scan_df, nod_df = load_meta()
 scan = scan_df.iloc[0]
@@ -87,7 +130,8 @@ with col1:
 
 with col2:
     overlay_nodules = st.checkbox("Show nodule overlay", value=True)
-    z = st.slider("Slice:", min_value=1, max_value=img_arr.shape[2], value=int(img_arr.shape[2]/2))
+    z = st.slider("Slice:", min_value=1,
+                  max_value=img_arr.shape[2], value=int(img_arr.shape[2]/2))
     level = st.number_input("Window level:", value=-600)
     width = st.number_input("Window width:", value=1500)
 
@@ -103,7 +147,19 @@ else:
 
 st.subheader("Detected nodules")
 
-st.write("See [this page](https://pylidc.github.io/annotation.html) for information about the coding scheme.")
+codes = load_ann_codes()
 
-nodules = nod_df.iloc[:, 2:]
-st.write(nodules)
+for index, nodule in nod_df.iterrows():
+    st.write(f"**Nodule #{nodule.NoduleID}**")
+    col1, col2, col3 = st.beta_columns([1, 2, 3])
+    with col1:
+        img_arr = load_nodule_img(pid, nodule.NoduleID)
+        img = get_nod_slice(img_arr)
+        st.image(img)
+    with col2:
+        st.write(f"Diameter: {nodule.Diameter:.2f}mm")
+        st.write(f"Area: {nodule.SurfaceArea:.2f}mm²")
+        st.write(f"Volume: {nodule.Volume:.2f}mm³")
+    with col3:
+        st.write(
+            f"Pred. malignancy: {codes['Malignancy'][nodule.Malignancy]}")
