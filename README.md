@@ -2,6 +2,8 @@
 
 [![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/felixpeters/lung-cancer-detection/app/app.py)
 
+[![Visualize in W&B](https://raw.githubusercontent.com/wandb/assets/main/wandb-github-badge-28.svg)](https://wandb.ai/felixpeters/lung-cancer-detection)
+
 ## Inspiration
 
 > With an estimated 160,000 deaths in 2018, lung cancer is the most common cause of cancer death in the United States (Ardila et al. 2019).
@@ -36,8 +38,9 @@ Random ideas:
 ### Materials
 
 Basics of CT images:
-  - [Windowing](https://radiopaedia.org/articles/windowing-ct)
-  - [Hounsfield unit](https://radiopaedia.org/articles/hounsfield-unit)
+
+- [Windowing](https://radiopaedia.org/articles/windowing-ct)
+- [Hounsfield unit](https://radiopaedia.org/articles/hounsfield-unit)
 
 PyTorch Lightning:
 
@@ -52,7 +55,6 @@ Monai (PyTorch-based library for medical imaging):
 - [DICOM loading example](https://github.com/Project-MONAI/tutorials/blob/master/modules/load_medical_images.ipynb)
 
 Preprocessing of LIDC-IDRI dataset:
-
 
 Preprocessing of DICOM images:
 
