@@ -30,7 +30,7 @@ def preprocess_lidc(src: Path, dest: Path):
     scan_data = []
     nod_data = []
 
-    for pid in tqdm(pids[:2]):
+    for pid in tqdm(pids):
         scan = get_scan(pid)
         scan_meta = get_scan_meta(scan)
         scan_data.append(scan_meta)
@@ -86,6 +86,14 @@ def get_scan(pid: str) -> pl.Scan:
 
 
 def get_scan_meta(scan: pl.Scan) -> Dict[str, Any]:
+    """Extracts basic metadata from a Scan object, i.e., metadata that does not require opening the respective DICOM files.
+
+    Args:
+        scan (pl.Scan): The scan from where metadata should be extracted.
+
+    Returns:
+        Dict[str, Any]: A dictionary containing the metadata.
+    """
     meta = {
         "StudyID": scan.study_instance_uid,
         "SeriesID": scan.series_instance_uid,
@@ -101,6 +109,17 @@ def get_scan_meta(scan: pl.Scan) -> Dict[str, Any]:
 
 
 def get_nod_meta(scan: pl.Scan, cluster: List[pl.Annotation], index: int, bbox: Tuple[slice]) -> Dict[str, Any]:
+    """Extracts metadata from a given lung nodule.
+
+    Args:
+        scan (pl.Scan): Scan in which the nodule was detected.
+        cluster (List[pl.Annotation]): List of annotations for this nodule (typically derived from the pylidc.scan.cluster_annotations method)
+        index (int): The index of the given nodule in this scan.
+        bbox (Tuple[slice]): Bounding box of the given nodule (typically derived from pylidc.utils.consensus function). 
+
+    Returns:
+        Dict[str, Any]: A dictionary containing the metadata.
+    """
     meta = {
         'PatientID': scan.patient_id,
         'StudyID': scan.study_instance_uid,
@@ -119,11 +138,25 @@ def get_nod_meta(scan: pl.Scan, cluster: List[pl.Annotation], index: int, bbox: 
         'Calcification': median_high([ann.calcification for ann in cluster]),
         'InternalStructure': median_high([ann.internalStructure for ann in cluster]),
         'Subtlety': median_high([ann.subtlety for ann in cluster]),
+        'x_start': bbox[0].start,
+        'x_stop': bbox[0].stop,
+        'y_start': bbox[1].start,
+        'y_stop': bbox[1].stop,
+        'z_start': bbox[2].start,
+        'z_stop': bbox[2].stop,
     }
     return meta
 
 
 def get_dcm_meta(scan: pl.Scan) -> Dict[str, Any]:
+    """Extracts metadata from a scan which requires loading the DICOM files.
+
+    Args:
+        scan (pl.Scan): The scan for which metadata should be extracted.
+
+    Returns:
+        Dict[str, Any]: A dictionary containing the metadata.
+    """
     path = Path(scan.get_path_to_dicom_files())
     fnames = sorted([fname for fname in os.listdir(path)
                      if fname.endswith('.dcm')])
