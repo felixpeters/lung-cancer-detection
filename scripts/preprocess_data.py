@@ -6,9 +6,6 @@ import warnings
 warnings.filterwarnings("ignore")
 
 
-data_dir = Path("/Volumes/LaCie/data/lung-cancer-detection/lidc-idri")
-
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Script extracts volumes, masks and metadata from LIDC-IDRI lung cancer dataset.")
