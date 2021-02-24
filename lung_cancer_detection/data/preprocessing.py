@@ -38,7 +38,7 @@ def preprocess_lidc(src: Path, dest: Path):
         vol = scan.to_volume(verbose=False)
         np.save(img_path/f"{pid}.npy", vol.astype(np.int16))
         ann_clusters = scan.cluster_annotations(verbose=False)
-        masks = []
+        masks = [np.zeros(vol.shape, dtype=np.uint8)]
 
         for i, cluster in enumerate(ann_clusters):
             pad_sz = int(np.max(vol.shape))
@@ -47,6 +47,7 @@ def preprocess_lidc(src: Path, dest: Path):
             nod_meta = get_nod_meta(scan, cluster, i, bbox)
             nod_data.append(nod_meta)
             masks.append(mask)
+
         mask = reduce(np.logical_or, masks)
         np.save(mask_path/f"{pid}.npy", mask.astype(np.uint8))
 
