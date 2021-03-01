@@ -1,6 +1,9 @@
 # Configuration
 .env*
 
+# Symlinks
+nbs/lung_cancer_detection
+
 # Data
 data/processed
 data/raw
