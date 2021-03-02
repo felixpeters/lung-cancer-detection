@@ -1,7 +1,8 @@
 from pathlib import Path
-from typing import Union, Sequence
+from typing import Union, Sequence, Tuple
 
 import pandas as pd
+import numpy as np
 from monai.data.image_reader import ImageReader
 
 
@@ -20,6 +21,7 @@ class LIDCReader(ImageReader):
 
     def __init__(self, data_dir: Path):
         super().__init__()
+        self.data_dir = data_dir
         df_path = data_dir / "meta/scans.csv"
         img_path = data_dir / "images"
         mask_path = data_dir / "masks"
@@ -27,7 +29,7 @@ class LIDCReader(ImageReader):
             raise ValueError("Data directory has invalid structure.")
         self.meta_df = pd.read_csv(df_path, index_col="PatientID")
 
-    def verify_suffix(self, filename: Union[Sequence[str], str]) -> bool:
+    def verify_suffix(self, filename: str) -> bool:
         """
         Verify whether the specified file format is supported by LIDCReader.
 
@@ -42,8 +44,14 @@ class LIDCReader(ImageReader):
                 "LIDCReader only supports individual files to be loaded.")
         return filename.endswith(".npy")
 
-    def read(self, data: Union[Sequence[str], str]):
-        return
+    def read(self, data: str) -> Tuple[np.ndarray, pd.Series]:
+        if isinstance(data, list) or not (data.endswith("npy")):
+            raise ValueError(
+                "LIDCReader only supports individual npy files to be loaded.")
+        img = np.load(self.data_dir/data)
+        pat_id = data.split("/")[1].split(".")[0]
+        meta = self.meta_df.loc[pat_id]
+        return (img, meta)
 
-    def get_data(self, img):
+    def get_data(self, img: Tuple[np.ndarray, pd.Series]):
         return
