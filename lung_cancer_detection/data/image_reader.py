@@ -45,6 +45,17 @@ class LIDCReader(ImageReader):
         return filename.endswith(".npy")
 
     def read(self, data: str) -> Tuple[np.ndarray, pd.Series]:
+        """Read image data from specified file and extract meta data from DataFrame.
+
+        Args:
+            data (str): Path to image file. Needs to include folder, i.e., `images` or `masks`
+
+        Raises:
+            ValueError: If list of filenames or filename with invalid suffix (i.e., not `npy`) is provided.
+
+        Returns:
+            Tuple[np.ndarray, pd.Series]: Numpy array with image data and meta data as series object
+        """
         if isinstance(data, list) or not (data.endswith("npy")):
             raise ValueError(
                 "LIDCReader only supports individual npy files to be loaded.")
