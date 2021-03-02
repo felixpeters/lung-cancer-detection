@@ -19,6 +19,7 @@ class LIDCReader(ImageReader):
     """
 
     def __init__(self, data_dir: Path):
+        super().__init__()
         df_path = data_dir / "meta/scans.csv"
         img_path = data_dir / "images"
         mask_path = data_dir / "masks"
