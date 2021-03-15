@@ -75,9 +75,9 @@ class LIDCReader(ImageReader):
         """
         img_array, scan_meta = img
         meta = self._get_meta_dict(scan_meta)
-        meta["original_affine"] = self._get_affine(scan_meta)
+        meta["original_affine"] = self._get_affine(meta)
         meta["affine"] = meta["original_affine"].copy()
-        meta["spatial_shape"] = self._get_spacial_shape(img_array)
+        meta["spatial_shape"] = np.asarray(img_array.shape)
         return img_array, meta
 
     def _get_meta_dict(self, img_meta: pd.Series) -> Dict[str, Any]:
@@ -96,3 +96,21 @@ class LIDCReader(ImageReader):
             [img_meta.PixelSpacing, img_meta.PixelSpacing, img_meta.SliceSpacing])
         meta["direction"] = np.eye(3)
         return meta
+
+    def _get_affine(self, img_meta: Dict[str, Any]) -> np.ndarray:
+        """Construct the affine matrix of the image in order to enable image transformations.
+
+        Args:
+            img_meta (Dict[str, Any]): Image metadata (typically returned from `_get_meta_dict` method)
+
+        Returns:
+            np.ndarray: Affine matrix (see https://github.com/RSIP-Vision/medio for more information)
+        """
+        spacing = img_meta["spacing"]
+        origin = img_meta["origin"]
+        direction = img_meta["direction"]
+
+        affine = np.eye(direction.shape[0] + 1)
+        affine[(slice(-1), slice(-1))] = direction @ np.diag(spacing)
+        affine[(slice(-1), -1)] = origin
+        return affine
