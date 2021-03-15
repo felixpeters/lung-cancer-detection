@@ -53,6 +53,7 @@ Monai (PyTorch-based library for medical imaging):
 - [3D segmentation examples](https://github.com/Project-MONAI/tutorials/blob/master/3d_segmentation/spleen_segmentation_3d.ipynb)
 - [DICOM loading example](https://github.com/Project-MONAI/tutorials/blob/master/modules/load_medical_images.ipynb)
 - [Dataset types](https://github.com/Project-MONAI/MONAIBootcamp2020/blob/master/day1notebooks/lab3_datasets.ipynb)
+- [Basis for definition of image metadata](https://github.com/RSIP-Vision/medio)
 
 Preprocessing of DICOM images:
 
