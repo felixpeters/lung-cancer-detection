@@ -25,7 +25,7 @@ It can be accessed via the [Cancer Imaging Archive](https://wiki.cancerimagingar
 
 Nodule detection model:
 
-- [ ] Preprocess LIDC dataset
+- [x] Preprocess LIDC dataset
 - [ ] Train baseline model
 
 Random ideas:
@@ -52,8 +52,7 @@ Monai (PyTorch-based library for medical imaging):
 - [Feature highlights](https://docs.monai.io/en/latest/highlights.html)
 - [3D segmentation examples](https://github.com/Project-MONAI/tutorials/blob/master/3d_segmentation/spleen_segmentation_3d.ipynb)
 - [DICOM loading example](https://github.com/Project-MONAI/tutorials/blob/master/modules/load_medical_images.ipynb)
-
-Preprocessing of LIDC-IDRI dataset:
+- [Dataset types](https://github.com/Project-MONAI/MONAIBootcamp2020/blob/master/day1notebooks/lab3_datasets.ipynb)
 
 Preprocessing of DICOM images:
 
