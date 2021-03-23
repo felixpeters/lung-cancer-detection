@@ -26,3 +26,13 @@ def test_setup(data_module):
     data_module.setup()
     assert len(data_module.train_ds) == 4
     assert len(data_module.val_ds) == 1
+    item = data_module.train_ds[0]
+    img = item["image"].numpy()
+    label = item["label"].numpy()
+    affine = item["image_meta_dict"]["affine"]
+    assert list(img.shape) == [1, 180, 180, 90]
+    assert list(label.shape) == [1, 180, 180, 90]
+    assert img.min() == 0.0
+    assert img.max() == 1.0
+    assert affine[0, 0] == affine[1, 1] == 1.5
+    assert affine[2, 2] == 2.0
