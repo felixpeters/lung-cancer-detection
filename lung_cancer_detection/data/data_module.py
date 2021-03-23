@@ -14,6 +14,7 @@ from monai.transforms import (
 from monai.data import Dataset, PersistentDataset
 from monai.utils import set_determinism
 import pandas as pd
+from sklearn.model_selection import train_test_split
 
 from image_reader import LIDCReader
 
@@ -34,7 +35,7 @@ class LIDCDataModule(pl.LightningDataModule):
         self.sample = sample
         self.seed = seed
         reader = LIDCReader(data_dir)
-        self.train_transform = Compose([
+        self.train_transforms = Compose([
             LoadImaged(keys=["image", "label"], reader=reader),
             AddChanneld(keys=["image", "label"]),
             Spacingd(keys=["image", "label"], pixdim=(
@@ -64,7 +65,21 @@ class LIDCDataModule(pl.LightningDataModule):
     def setup(self, stage: Optional[str] = None):
         self.scans = pd.read_csv(
             self.data_dir/"meta/scans.csv", index_col="PatientID")
+        set_determinism(seed=self.seed)
 
+        if stage == "fit" or stage is None:
+            train_idx, val_idx = train_test_split(
+                list(self.scans.index), test_size=self.val_split, random_state=self.seed, shuffle=True)
+            train_dicts = [
+                {"image": f"images/{idx}.npy", "label": f"masks/{idx}.npy"} for idx in train_idx
+            ]
+            val_dicts = [
+                {"image": f"images/{idx}.npy", "label": f"masks/{idx}.npy"} for idx in val_idx
+            ]
+            self.train_ds = PersistentDataset(
+                train_dicts, transform=self.train_transforms, cache_dir=self.cache_dir)
+            self.val_ds = PersistentDataset(
+                val_dicts, transform=self.val_transforms, cache_dir=self.cache_dir)
         return
 
     def train_dataloader(self):
