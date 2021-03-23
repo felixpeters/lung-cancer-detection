@@ -27,13 +27,12 @@ class LIDCDataModule(pl.LightningDataModule):
             - https://github.com/felixpeters/melanoma-detection/blob/master/src/data/data_module.py
     """
 
-    def __init__(self, data_dir: Path, cache_dir: Path, batch_size: int, val_split: float = 0.2, sample=None, seed: int = 47):
+    def __init__(self, data_dir: Path, cache_dir: Path, batch_size: int, val_split: float = 0.2, seed: int = 47):
         super().__init__()
         self.data_dir = data_dir
         self.cache_dir = cache_dir
         self.batch_size = batch_size
         self.val_split = val_split
-        self.sample = sample
         self.seed = seed
         reader = LIDCReader(data_dir)
         self.train_transforms = Compose([
