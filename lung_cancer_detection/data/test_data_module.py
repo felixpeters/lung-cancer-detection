@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from data_module import LIDCDataModule
+from .data_module import LIDCDataModule
 
 
 @pytest.fixture(scope="session")
@@ -34,5 +34,24 @@ def test_setup(data_module):
     assert list(label.shape) == [1, 180, 180, 90]
     assert img.min() == 0.0
     assert img.max() == 1.0
-    assert affine[0, 0] == affine[1, 1] == 1.5
+    assert affine[0, 0] == 1.5
+    assert affine[1, 1] == 1.5
     assert affine[2, 2] == 2.0
+
+
+def test_train_dataloader(data_module):
+    data_module.setup()
+    loader = data_module.train_dataloader()
+    assert len(loader) == 2
+    for batch in loader:
+        assert batch["image"].numpy().shape == (2, 1, 180, 180, 90)
+        assert batch["label"].numpy().shape == (2, 1, 180, 180, 90)
+
+
+def test_val_dataloader(data_module):
+    data_module.setup()
+    loader = data_module.val_dataloader()
+    assert len(loader) == 1
+    for batch in loader:
+        assert batch["image"].numpy().shape == (1, 1, 180, 180, 90)
+        assert batch["label"].numpy().shape == (1, 1, 180, 180, 90)

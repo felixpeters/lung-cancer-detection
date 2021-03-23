@@ -17,7 +17,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader
 
-from image_reader import LIDCReader
+from .image_reader import LIDCReader
 
 
 class LIDCDataModule(pl.LightningDataModule):
@@ -93,7 +93,7 @@ class LIDCDataModule(pl.LightningDataModule):
     def val_dataloader(self):
         # TODO: Increase number of workers
         val_loader = DataLoader(self.val_ds, batch_size=self.batch_size)
-        return
+        return val_loader
 
     def test_dataloader(self):
         return
