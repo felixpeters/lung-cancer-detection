@@ -60,6 +60,7 @@ class LIDCDataModule(pl.LightningDataModule):
                                roi_size=[180, 180, 90]),
             ToTensord(keys=["image", "label"]),
         ])
+        return
 
     def prepare_data(self):
         return
