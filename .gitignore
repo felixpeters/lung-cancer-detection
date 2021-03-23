@@ -7,6 +7,7 @@ nbs/lung_cancer_detection
 # Data
 data/processed
 data/raw
+data/test/cache
 *.pickle
 
 # Python

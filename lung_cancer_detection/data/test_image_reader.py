@@ -15,7 +15,7 @@ def data_dir():
 
 def test_init(data_dir):
     reader = LIDCReader(data_dir)
-    assert len(reader.meta_df) == 1
+    assert len(reader.meta_df) == 5
 
 
 def test_verify_suffix(data_dir):

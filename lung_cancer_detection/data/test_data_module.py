@@ -20,3 +20,9 @@ def data_module(data_dir):
 def test_init(data_module):
     assert data_module.batch_size == 2
     assert data_module.data_dir.exists() == True
+
+
+def test_setup(data_module):
+    data_module.setup()
+    assert len(data_module.train_ds) == 4
+    assert len(data_module.val_ds) == 1
