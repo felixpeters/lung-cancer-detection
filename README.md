@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/felixpeters/lung-cancer-detection/actions/workflows/main.yml/badge.svg)](https://github.com/felixpeters/lung-cancer-detection/actions/workflows/main.yml)
 [![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/felixpeters/lung-cancer-detection/app/app.py)
-[![Visualize in W&B](https://raw.githubusercontent.com/wandb/assets/main/wandb-github-badge-28.svg)](https://wandb.ai/felixpeters/lung-cancer-detection)
+[![Visualize in W&B](https://raw.githubusercontent.com/wandb/assets/main/wandb-github-badge-gradient.svg)](https://wandb.ai/felixpeters/lung-cancer-detection)
 
 ## Inspiration
 
