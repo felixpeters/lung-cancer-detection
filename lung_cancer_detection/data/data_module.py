@@ -15,6 +15,7 @@ from monai.data import Dataset, PersistentDataset
 from monai.utils import set_determinism
 import pandas as pd
 from sklearn.model_selection import train_test_split
+from torch.utils.data import DataLoader
 
 from image_reader import LIDCReader
 
@@ -38,6 +39,7 @@ class LIDCDataModule(pl.LightningDataModule):
         self.train_transforms = Compose([
             LoadImaged(keys=["image", "label"], reader=reader),
             AddChanneld(keys=["image", "label"]),
+            # TODO: Test different spacing configurations
             Spacingd(keys=["image", "label"], pixdim=(
                 1.5, 1.5, 2.0), mode=("bilinear", "nearest")),
             # TODO: Test different scaling methods
@@ -83,9 +85,14 @@ class LIDCDataModule(pl.LightningDataModule):
         return
 
     def train_dataloader(self):
-        return
+        # TODO: Increase number of workers
+        train_loader = DataLoader(
+            self.train_ds, batch_size=self.batch_size, shuffle=True)
+        return train_loader
 
     def val_dataloader(self):
+        # TODO: Increase number of workers
+        val_loader = DataLoader(self.val_ds, batch_size=self.batch_size)
         return
 
     def test_dataloader(self):
