@@ -1,5 +1,6 @@
 from typing import Optional
 from pathlib import Path
+import os
 
 import pytorch_lightning as pl
 from monai.transforms import (
@@ -85,14 +86,13 @@ class LIDCDataModule(pl.LightningDataModule):
         return
 
     def train_dataloader(self):
-        # TODO: Increase number of workers
         train_loader = DataLoader(
-            self.train_ds, batch_size=self.batch_size, shuffle=True)
+            self.train_ds, batch_size=self.batch_size, shuffle=True, num_workers=os.cpu_count())
         return train_loader
 
     def val_dataloader(self):
-        # TODO: Increase number of workers
-        val_loader = DataLoader(self.val_ds, batch_size=self.batch_size)
+        val_loader = DataLoader(
+            self.val_ds, batch_size=self.batch_size, num_workers=os.cpu_count())
         return val_loader
 
     def test_dataloader(self):
