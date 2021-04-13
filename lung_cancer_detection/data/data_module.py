@@ -12,7 +12,7 @@ from monai.transforms import (
     ToTensord,
     CenterSpatialCropd,
 )
-from monai.data import Dataset, PersistentDataset
+from monai.data import Dataset, PersistentDataset, list_data_collate
 from monai.utils import set_determinism
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -103,7 +103,7 @@ class LIDCDataModule(pl.LightningDataModule):
             DataLoader: Data loader for model training
         """
         train_loader = DataLoader(
-            self.train_ds, batch_size=self.batch_size, shuffle=True, num_workers=os.cpu_count())
+            self.train_ds, batch_size=self.batch_size, shuffle=True, num_workers=os.cpu_count(), collate_fn=list_data_collate)
         return train_loader
 
     def val_dataloader(self) -> DataLoader:
