@@ -14,12 +14,13 @@ class NoduleSegmentationModel(pl.LightningModule):
         self.model = model
         self.loss = loss
         self.lr = lr
+        self.save_hyperparameters()
         return
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
         return self.model(x)
 
-    def training_step(self, batch, batch_idx):
+    def training_step(self, batch: dict, batch_idx: int) -> torch.Tensor:
         images, labels = batch["image"], batch["label"]
         output = self.forward(images)
         loss = self.loss(output, labels)
@@ -27,7 +28,7 @@ class NoduleSegmentationModel(pl.LightningModule):
                  on_epoch=True, prog_bar=True, logger=True)
         return loss
 
-    def validation_step(self, batch, batch_idx):
+    def validation_step(self, batch: dict, batch_idx: int) -> torch.Tensor:
         images, labels = batch["image"], batch["label"]
         output = self.forward(images)
         loss = self.loss(output, labels)
@@ -35,6 +36,6 @@ class NoduleSegmentationModel(pl.LightningModule):
                  on_epoch=True, prog_bar=True, logger=True)
         return loss
 
-    def configure_optimizers(self):
+    def configure_optimizers(self) -> torch.optim.Optimizer:
         optimizer = Adam(self.model.parameters(), self.lr)
         return optimizer
