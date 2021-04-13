@@ -15,7 +15,20 @@ def data_dir():
 @pytest.fixture(scope="session")
 def data_module(data_dir):
     data_module = LIDCDataModule(data_dir, data_dir/"cache", batch_size=2)
+    data_module.setup()
     return data_module
+
+
+@pytest.fixture(scope="session")
+def train_loader(data_module):
+    loader = data_module.train_dataloader()
+    return loader
+
+
+@pytest.fixture(scope="session")
+def val_loader(data_module):
+    loader = data_module.val_dataloader()
+    return loader
 
 
 def test_init(data_module):
@@ -24,7 +37,6 @@ def test_init(data_module):
 
 
 def test_setup(data_module):
-    data_module.setup()
     assert len(data_module.train_ds) == 8
     assert len(data_module.val_ds) == 2
     item = data_module.train_ds[0]
@@ -40,19 +52,15 @@ def test_setup(data_module):
     assert affine[2, 2] == 2.0
 
 
-def test_train_dataloader(data_module):
-    data_module.setup()
-    loader = data_module.train_dataloader()
-    assert len(loader) == 4
-    for batch in loader:
+def test_train_dataloader(train_loader):
+    assert len(train_loader) == 4
+    for batch in train_loader:
         assert batch["image"].numpy().shape == (2, 1, 180, 180, 90)
         assert batch["label"].numpy().shape == (2, 1, 180, 180, 90)
 
 
-def test_val_dataloader(data_module):
-    data_module.setup()
-    loader = data_module.val_dataloader()
-    assert len(loader) == 1
-    for batch in loader:
+def test_val_dataloader(val_loader):
+    assert len(val_loader) == 1
+    for batch in val_loader:
         assert batch["image"].numpy().shape == (2, 1, 180, 180, 90)
         assert batch["label"].numpy().shape == (2, 1, 180, 180, 90)
