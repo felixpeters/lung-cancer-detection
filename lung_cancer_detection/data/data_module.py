@@ -22,13 +22,17 @@ from .image_reader import LIDCReader
 
 
 class LIDCDataModule(pl.LightningDataModule):
-    """See examples:
-            - https://github.com/Project-MONAI/tutorials/blob/master/3d_segmentation/spleen_segmentation_3d_lightning.ipynb
-            - https://pytorch-lightning.readthedocs.io/en/latest/extensions/datamodules.html
-            - https://github.com/felixpeters/melanoma-detection/blob/master/src/data/data_module.py
-    """
 
     def __init__(self, data_dir: Path, cache_dir: Path, batch_size: int, val_split: float = 0.2, seed: int = 47):
+        """Module that deals with preparation of the LIDC dataset for training segmentation models.
+
+        Args:
+            data_dir (Path): Folder where preprocessed data is stored. See `LIDCReader` docs for expected structure.
+            cache_dir (Path): Folder where deterministic data transformations should be cached.
+            batch_size (int): Number of training examples in each batch.
+            val_split (float, optional): Percentage of examples to set aside for validation. Defaults to 0.2.
+            seed (int, optional): Random seed used for deterministic sampling and transformations. Defaults to 47.
+        """
         super().__init__()
         self.data_dir = data_dir
         self.cache_dir = cache_dir
@@ -63,9 +67,16 @@ class LIDCDataModule(pl.LightningDataModule):
         return
 
     def prepare_data(self):
+        """Not needed as of current version.
+        """
         return
 
     def setup(self, stage: Optional[str] = None):
+        """Set up persistent datasets for training and validation.
+
+        Args:
+            stage (Optional[str], optional): Stage in the model lifecycle, e.g., `fit` or `test`. Only needed datasets will be created. Defaults to None.
+        """
         self.scans = pd.read_csv(
             self.data_dir/"meta/scans.csv", index_col="PatientID")
         set_determinism(seed=self.seed)
@@ -85,15 +96,27 @@ class LIDCDataModule(pl.LightningDataModule):
                 val_dicts, transform=self.val_transforms, cache_dir=self.cache_dir)
         return
 
-    def train_dataloader(self):
+    def train_dataloader(self) -> DataLoader:
+        """Create data loader for model training.
+
+        Returns:
+            DataLoader: Data loader for model training
+        """
         train_loader = DataLoader(
             self.train_ds, batch_size=self.batch_size, shuffle=True, num_workers=os.cpu_count())
         return train_loader
 
-    def val_dataloader(self):
+    def val_dataloader(self) -> DataLoader:
+        """Create data loader for model validation.
+
+        Returns:
+            DataLoader: Data loader for model validation
+        """
         val_loader = DataLoader(
             self.val_ds, batch_size=self.batch_size, num_workers=os.cpu_count())
         return val_loader
 
     def test_dataloader(self):
+        """Not needed in the current library version.
+        """
         return
