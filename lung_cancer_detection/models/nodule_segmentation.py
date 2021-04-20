@@ -11,6 +11,14 @@ from typing import Sequence, Union
 class NoduleSegmentationUNet(pl.LightningModule):
 
     def __init__(self, features: Sequence[int] = (32, 32, 64, 128, 256, 32), norm: Union[str, tuple] = ('instance', {'affine': True}), dropout: float = 0.0, lr: float = 1e-4):
+        """Creates a simple UNet for segmenting nodules in chest CTs. Defines its training and validation logic.
+
+        Args:
+            features (Sequence[int], optional): Number of features in each layer. Defaults to (32, 32, 64, 128, 256, 32).
+            norm (Union[str, tuple], optional): Feature normalization type to use. Defaults to ('instance', {'affine': True}).
+            dropout (float, optional): Dropout ratio. Defaults to 0.0.
+            lr (float, optional): Initial learning rate. Defaults to 1e-4.
+        """
         super().__init__()
         self.model = BasicUNet(features=features, norm=norm, dropout=dropout)
         self.loss = DiceLoss(to_onehot_y=True, softmax=True)
