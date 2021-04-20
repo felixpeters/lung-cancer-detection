@@ -1,0 +1,16 @@
+random_seed: 47
+data:
+  data_dir: ../data/test
+  cache_dir: ../data/test/cache
+  batch_size: 2
+  val_split: 0.2
+model:
+  features:
+    - 4
+    - 4
+    - 8
+    - 16
+    - 32
+    - 4
+  dropout: 0.0
+  lr: 0.0001
