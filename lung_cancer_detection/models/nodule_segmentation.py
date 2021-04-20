@@ -5,14 +5,15 @@ from torch.nn.modules.loss import _Loss
 from torch.optim import Adam
 from monai.networks.nets import BasicUNet
 from monai.losses import DiceLoss
+from typing import Sequence, Union
 
 
-class NoduleSegmentationModel(pl.LightningModule):
+class NoduleSegmentationUNet(pl.LightningModule):
 
-    def __init__(self, model: nn.Module = BasicUNet(), loss: _Loss = DiceLoss(to_onehot_y=True, softmax=True), lr: float = 1e-4):
+    def __init__(self, features: Sequence[int] = (32, 32, 64, 128, 256, 32), norm: Union[str, tuple] = ('instance', {'affine': True}), dropout: float = 0.0, lr: float = 1e-4):
         super().__init__()
-        self.model = model
-        self.loss = loss
+        self.model = BasicUNet(features=features, norm=norm, dropout=dropout)
+        self.loss = DiceLoss(to_onehot_y=True, softmax=True)
         self.lr = lr
         self.save_hyperparameters()
         return

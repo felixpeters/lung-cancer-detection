@@ -1,11 +1,10 @@
 from pathlib import Path
 
-from .nodule_segmentation import NoduleSegmentationModel
+from .nodule_segmentation import NoduleSegmentationUNet
 from ..data.data_module import LIDCDataModule
 from ..data.test_data_module import data_module, data_dir, train_loader, val_loader
 
 import pytest
-from monai.networks.nets import BasicUNet
 
 
 @pytest.fixture(scope="session")
@@ -22,8 +21,7 @@ def val_batch(val_loader):
 
 @pytest.fixture(scope="session")
 def seg_model():
-    model = NoduleSegmentationModel(
-        model=BasicUNet(features=(4, 4, 8, 16, 32, 4)))
+    model = NoduleSegmentationUNet(features=(4, 4, 8, 16, 32, 4))
     return model
 
 
