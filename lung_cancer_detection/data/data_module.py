@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Sequence
 from pathlib import Path
 import os
 
@@ -23,7 +23,7 @@ from .image_reader import LIDCReader
 
 class LIDCDataModule(pl.LightningDataModule):
 
-    def __init__(self, data_dir: Path, cache_dir: Path, batch_size: int, val_split: float = 0.2, seed: int = 47):
+    def __init__(self, data_dir: Path, cache_dir: Path, batch_size: int, val_split: float = 0.2, spacing: Sequence[int] = (1.5, 1.5, 2.0), roi_size: Sequence[int] = [180, 180, 90], seed: int = 47):
         """Module that deals with preparation of the LIDC dataset for training segmentation models.
 
         Args:
@@ -38,32 +38,40 @@ class LIDCDataModule(pl.LightningDataModule):
         self.cache_dir = cache_dir
         self.batch_size = batch_size
         self.val_split = val_split
+        self.spacing = spacing
+        self.roi_size = roi_size
         self.seed = seed
         reader = LIDCReader(data_dir)
         self.train_transforms = Compose([
             LoadImaged(keys=["image", "label"], reader=reader),
             AddChanneld(keys=["image", "label"]),
             # TODO: Test different spacing configurations
-            Spacingd(keys=["image", "label"], pixdim=(
-                1.5, 1.5, 2.0), mode=("bilinear", "nearest")),
+            Spacingd(keys=["image", "label"], pixdim=self.spacing,
+                     mode=("bilinear", "nearest")),
             # TODO: Test different scaling methods
             ScaleIntensityd(keys=["image"]),
             # TODO: Test different cropping methods
             CenterSpatialCropd(keys=["image", "label"],
-                               roi_size=[180, 180, 90]),
+                               roi_size=self.roi_size),
             # TODO: Test data augmentation methods
             ToTensord(keys=["image", "label"]),
         ])
         self.val_transforms = Compose([
             LoadImaged(keys=["image", "label"], reader=reader),
             AddChanneld(keys=["image", "label"]),
-            Spacingd(keys=["image", "label"], pixdim=(
-                1.5, 1.5, 2.0), mode=("bilinear", "nearest")),
+            Spacingd(keys=["image", "label"], pixdim=self.spacing,
+                     mode=("bilinear", "nearest")),
             ScaleIntensityd(keys=["image"]),
             CenterSpatialCropd(keys=["image", "label"],
-                               roi_size=[180, 180, 90]),
+                               roi_size=self.roi_size),
             ToTensord(keys=["image", "label"]),
         ])
+        self.hparams = {
+            "batch_size": self.batch_size,
+            "val_split": self.val_split,
+            "spacing": self.spacing,
+            "roi_size": self.roi_size,
+        }
         return
 
     def prepare_data(self):

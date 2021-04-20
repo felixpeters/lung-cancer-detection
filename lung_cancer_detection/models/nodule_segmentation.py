@@ -23,7 +23,12 @@ class NoduleSegmentationUNet(pl.LightningModule):
         self.model = BasicUNet(features=features, norm=norm, dropout=dropout)
         self.loss = DiceLoss(to_onehot_y=True, softmax=True)
         self.lr = lr
-        self.save_hyperparameters()
+        self.hparams = {
+            "features": features,
+            "normalization": norm,
+            "dropout": dropout,
+            "lr": lr,
+        }
         return
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:

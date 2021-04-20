@@ -1,4 +1,10 @@
 random_seed: 47
+wandb:
+  offline: False
+  project: "lung-cancer-detection"
+  tags:
+    - testing
+    - nodule-segmentation
 data:
   data_dir: ../data/test
   cache_dir: ../data/test/cache
@@ -14,3 +20,8 @@ model:
     - 4
   dropout: 0.0
   lr: 0.0001
+  norm:
+    - instance
+    - affine: True
+experiment:
+  max_epochs: 2
