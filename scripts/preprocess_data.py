@@ -1,6 +1,7 @@
+from lung_cancer_detection.data.preprocessing import preprocess_lidc
+import wandb
 import yaml
 import argparse
-from lung_cancer_detection.data.preprocessing import preprocess_lidc
 from pathlib import Path
 import warnings
 warnings.filterwarnings("ignore")
@@ -19,11 +20,18 @@ if __name__ == "__main__":
     with open(args.config, 'r') as stream:
         config = yaml.safe_load(stream)
 
-    data_dir = Path(config["data"]["lidc_dir"]).absolute()
-    src_dir = data_dir/"LIDC-IDRI"
-    dest_dir = data_dir/"processed"
+    src_dir = Path(config["data"]["raw_dir"]).absolute()
+    dest_dir = Path(config["data"]["data_dir"]).absolute()
     print("CONFIGURATION:")
     print(f"Source directory: {src_dir}")
     print(f"Destination directory: {dest_dir}")
 
-    preprocess_lidc(src_dir, dest_dir)
+    preprocess_lidc(src_dir, dest_dir,
+                    sample_size=config["data"]["sample_size"])
+
+    run = wandb.init(project=config["wandb"]["project"],
+                     job_type="data", tags=config["wandb"]["tags"])
+    artifact = wandb.Artifact(config["wandb"]["seg_data_artifact"], type="dataset",
+                              description=config["wandb"]["seg_data_artifact_description"])
+    artifact.add_reference("file://" + str(dest_dir))
+    run.log_artifact(artifact)

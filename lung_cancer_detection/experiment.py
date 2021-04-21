@@ -14,6 +14,7 @@ class Experiment:
         self.trainer = Trainer(logger=self.logger, **kwargs)
 
     def find_lr(self):
+        self.trainer.tune(self.model, datamodule=self.data)
         return
 
     def run(self):

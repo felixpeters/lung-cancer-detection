@@ -12,12 +12,13 @@ import pylidc as pl
 import pydicom as dicom
 
 
-def preprocess_lidc(src: Path, dest: Path):
+def preprocess_lidc(src: Path, dest: Path, sample_size: int = False):
     """Preprocesses the LIDC-IDRI dataset after being downloaded from TCIA.
 
     Args:
         src (Path): Path to directory where the DICOM folders reside.
         dest (Path): Path to which volumes, masks and metadata should be written.
+        sample_size (int): Sample size. Mainly used for testing. Defaults to False
     """
     img_path = dest / "images"
     img_path.mkdir(parents=True, exist_ok=True)
@@ -29,6 +30,8 @@ def preprocess_lidc(src: Path, dest: Path):
     pids = get_pids(src)
     scan_data = []
     nod_data = []
+    if sample_size:
+        pids = pids[:sample_size]
 
     for pid in tqdm(pids):
         scan = get_scan(pid)
