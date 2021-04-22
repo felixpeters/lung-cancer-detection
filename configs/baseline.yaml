@@ -7,11 +7,12 @@ wandb:
     - baseline
   seg_data_artifact:
     name: lidc-idri-cts
-    version: v2
-    description: "Full dataset of chest CT scans, including scan and nodule metadata"
+    version: v1
+    description: "Zipped dataset of chest CT scans and masks in npy format, including scan and nodule metadata"
 data:
   raw_dir: /Volumes/LaCie/data/lung-cancer-detection/lidc-idri/LIDC-IDRI/
   data_dir: /Volumes/LaCie/data/lung-cancer-detection/lidc-idri/processed/segmentation/
+  zip_dir: /Volumes/LaCie/data/lung-cancer-detection/lidc-idri/processed/segmentation_compressed/
   cache_dir: /Volumes/LaCie/data/lung-cancer-detection/lidc-idri/cache/
   sample_size: False
   batch_size: 32

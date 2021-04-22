@@ -1,15 +1,18 @@
-from lung_cancer_detection.data.preprocessing import preprocess_lidc
+import argparse
+import shutil
+import warnings
+from pathlib import Path
+
 import wandb
 import yaml
-import argparse
-from pathlib import Path
-import warnings
+from lung_cancer_detection.data.preprocessing import preprocess_lidc
+
 warnings.filterwarnings("ignore")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="Script extracts volumes, masks and metadata from LIDC-IDRI lung cancer dataset.")
+        description="Extracts volumes, masks and metadata from LIDC-IDRI dataset")
     parser.add_argument(
         '--config',
         type=lambda p: Path(p).absolute(),
@@ -22,16 +25,20 @@ if __name__ == "__main__":
 
     src_dir = Path(config["data"]["raw_dir"]).absolute()
     dest_dir = Path(config["data"]["data_dir"]).absolute()
+    zip_dir = Path(config["data"]["zip_dir"]).absolute()
     print("CONFIGURATION:")
     print(f"Source directory: {src_dir}")
     print(f"Destination directory: {dest_dir}")
+    print(f"Archive directory: {zip_dir}")
 
     preprocess_lidc(src_dir, dest_dir,
                     sample_size=config["data"]["sample_size"])
 
+    shutil.make_archive(zip_dir/"segmentation", "zip", dest_dir)
+
     run = wandb.init(project=config["wandb"]["project"],
                      job_type="data", tags=config["wandb"]["tags"])
-    artifact = wandb.Artifact(config["wandb"]["seg_data_artifact"], type="dataset",
-                              description=config["wandb"]["seg_data_artifact_description"])
-    artifact.add_reference("file://" + str(dest_dir))
+    artifact = wandb.Artifact(config["wandb"]["seg_data_artifact"]["name"], type="dataset",
+                              description=config["wandb"]["seg_data_artifact"]["description"])
+    artifact.add_reference("file://" + str(zip_dir))
     run.log_artifact(artifact)

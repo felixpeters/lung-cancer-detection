@@ -1,4 +1,5 @@
-from pytorch_lightning import LightningDataModule, LightningModule, Trainer, seed_everything
+from pytorch_lightning import (LightningDataModule, LightningModule, Trainer,
+                               seed_everything)
 from pytorch_lightning.loggers.base import LightningLoggerBase
 
 
@@ -15,8 +16,6 @@ class Experiment:
 
     def find_lr(self):
         self.trainer.tune(self.model, datamodule=self.data)
-        return
 
     def run(self):
         self.trainer.fit(self.model, self.data)
-        return
