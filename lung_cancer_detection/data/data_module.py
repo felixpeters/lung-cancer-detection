@@ -1,20 +1,13 @@
-from typing import Optional, Sequence
-from pathlib import Path
 import os
+from pathlib import Path
+from typing import Optional, Sequence
 
-import pytorch_lightning as pl
-from monai.transforms import (
-    AddChanneld,
-    Compose,
-    LoadImaged,
-    ScaleIntensityd,
-    Spacingd,
-    ToTensord,
-    CenterSpatialCropd,
-)
-from monai.data import Dataset, PersistentDataset, list_data_collate
-from monai.utils import set_determinism
 import pandas as pd
+import pytorch_lightning as pl
+from monai.data import Dataset, PersistentDataset, list_data_collate
+from monai.transforms import (AddChanneld, CenterSpatialCropd, Compose,
+                              LoadImaged, ScaleIntensityd, Spacingd, ToTensord)
+from monai.utils import set_determinism
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader
 
@@ -23,7 +16,9 @@ from .image_reader import LIDCReader
 
 class LIDCDataModule(pl.LightningDataModule):
 
-    def __init__(self, data_dir: Path, cache_dir: Path, batch_size: int, val_split: float = 0.2, spacing: Sequence[int] = (1.5, 1.5, 2.0), roi_size: Sequence[int] = [180, 180, 90], seed: int = 47):
+    def __init__(self, data_dir: Path, cache_dir: Path, batch_size: int,
+                 val_split: float = 0.2, spacing: Sequence[int] = (1.5, 1.5, 2.0),
+                 roi_size: Sequence[int] = [180, 180, 90], seed: int = 47, **kwargs):
         """Module that deals with preparation of the LIDC dataset for training segmentation models.
 
         Args:

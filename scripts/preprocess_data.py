@@ -23,6 +23,8 @@ if __name__ == "__main__":
     with open(args.config, 'r') as stream:
         config = yaml.safe_load(stream)
 
+    preprocess_lidc()
+
     src_dir = Path(config["data"]["raw_dir"]).absolute()
     dest_dir = Path(config["data"]["data_dir"]).absolute()
     zip_dir = Path(config["data"]["zip_dir"]).absolute()
@@ -37,8 +39,9 @@ if __name__ == "__main__":
     shutil.make_archive(zip_dir/"segmentation", "zip", dest_dir)
 
     run = wandb.init(project=config["wandb"]["project"],
-                     job_type="data", tags=config["wandb"]["tags"])
-    artifact = wandb.Artifact(config["wandb"]["seg_data_artifact"]["name"], type="dataset",
-                              description=config["wandb"]["seg_data_artifact"]["description"])
+                     job_type="preprocessing", tags=config["wandb"]["tags"])
+    artifact = wandb.Artifact(config["artifacts"]["seg_data_artifact"]["name"],
+                              type=config["artifacts"]["seg_data_artifact"]["type"],
+                              description=config["artifacts"]["seg_data_artifact"]["description"])
     artifact.add_reference("file://" + str(zip_dir))
     run.log_artifact(artifact)

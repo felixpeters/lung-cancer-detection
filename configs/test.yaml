@@ -5,10 +5,17 @@ wandb:
   tags:
     - nodule-segmentation
     - testing
+artifacts:
   seg_data_artifact:
     name: lidc-idri-cts
     version: v0
+    type: dataset
     description: "Ten chest CT scans from LIDC-IDRI dataset including metadata"
+  seg_model_artifact:
+    name: nodule-segmentation-model
+    version: v0
+    type: model
+    description: "Downsized UNet for segmenting lung nodules in chest CTs"
 data:
   raw_dir: /Volumes/LaCie/data/lung-cancer-detection/lidc-idri/LIDC-IDRI/
   data_dir: data/test/
@@ -32,5 +39,5 @@ seg_model:
 experiment:
   max_epochs: 2
   auto_lr_find: True
-  gpus: -1
-  auto_select_gpus: True
+  gpus: 0
+  auto_select_gpus: False
