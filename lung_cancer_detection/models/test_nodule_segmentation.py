@@ -2,9 +2,8 @@ from pathlib import Path
 
 import pytest
 
-from ..data.data_module import SegmentationDataModule
-from ..data.test_data_module import (data_dir, data_module, train_loader,
-                                     val_loader)
+from ..data.scan import SegmentationDataModule
+from ..data.test_scan import data_dir, data_module, train_loader, val_loader
 from .nodule_segmentation import NoduleSegmentationUNet
 
 
