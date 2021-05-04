@@ -21,6 +21,7 @@ data:
   raw_dir: /Volumes/LaCie/data/lung-cancer-detection/lidc-idri/LIDC-IDRI/
   data_dir: /Volumes/LaCie/data/lung-cancer-detection/lidc-idri/processed/
   zip_dir: /Volumes/LaCie/data/lung-cancer-detection/lidc-idri/compressed/
+  split_dir: /Volumes/LaCie/data/lung-cancer-detection/lidc-idri/splits/
   cache_dir: /Volumes/LaCie/data/lung-cancer-detection/lidc-idri/cache/
   sample_size: False
   batch_size: 32

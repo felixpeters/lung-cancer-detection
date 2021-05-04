@@ -10,6 +10,7 @@ import pandas as pd
 import pydicom as dicom
 import pylidc as pl
 from pylidc.utils import consensus
+from sklearn.model_selection import train_test_split
 from tqdm import tqdm
 
 
@@ -192,3 +193,26 @@ def get_dcm_meta(scan: pl.Scan) -> Dict[str, Any]:
         "ManufacturerModelName": getattr(dcm, "ManufacturerModelName", ""),
     }
     return meta
+
+
+def split_lidc(meta_path: Path, val_split: float = 0.2, seed: int = 47) -> Dict[str, List[str]]:
+    """Splits LIDC-IDRI dataset into training and validation sets by patient ID.
+
+    Args:
+        meta_path (Path): Path to CSV file containing scan metadata.
+        val_split (float): Percentage of validation data. Defaults to 0.2.
+        seed (int): Random seed to use for splitting. Defaults to 47.
+
+    Returns:
+        Dict[str, List[str]]: Dictionary containg patient IDs for training and
+        validation sets.
+    """
+    df = pd.read_csv(meta_path, index_col="PatientID")
+    pids = list(df.index)
+    train_pids, val_pids = train_test_split(
+        pids, test_size=val_split, random_state=seed, shuffle=True)
+    res = {
+        "training": train_pids,
+        "validation": val_pids,
+    }
+    return res
