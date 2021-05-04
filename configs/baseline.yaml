@@ -4,13 +4,15 @@ wandb:
   project: "lung-cancer-detection"
   tags:
     - nodule-segmentation
+    - nodule-classification
     - baseline
 artifacts:
-  seg_data_artifact:
-    name: lidc-idri-cts
+  data:
+    name: lidc-idri-raw
     version: v1
-    description: "Zipped dataset of ten chest CT scans and masks in npy format, including scan and nodule metadata"
-  seg_model_artifact:
+    type: dataset
+    description: "Zipped dataset of all chest CT scans, masks and nodule volumes in npy format, including scan and nodule metadata"
+  seg_model:
     name: nodule-segmentation-model
     version: v1
     type: model
@@ -20,7 +22,7 @@ data:
   data_dir: /Volumes/LaCie/data/lung-cancer-detection/lidc-idri/processed/
   zip_dir: /Volumes/LaCie/data/lung-cancer-detection/lidc-idri/compressed/
   cache_dir: /Volumes/LaCie/data/lung-cancer-detection/lidc-idri/cache/
-  sample_size: 10
+  sample_size: False
   batch_size: 32
   val_split: 0.2
 seg_model:

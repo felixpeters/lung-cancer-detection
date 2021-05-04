@@ -47,9 +47,9 @@ if __name__ == "__main__":
 
     if args.version:
         run = wandb.init(project=config["wandb"]["project"],
-                         job_type="preprocessing", tags=config["wandb"]["tags"])
-        artifact = wandb.Artifact(config["artifacts"]["seg_data_artifact"]["name"],
-                                  type=config["artifacts"]["seg_data_artifact"]["type"],
-                                  description=config["artifacts"]["seg_data_artifact"]["description"])
+                         job_type="preprocess", tags=config["wandb"]["tags"])
+        artifact = wandb.Artifact(config["artifacts"]["data"]["name"],
+                                  type=config["artifacts"]["data"]["type"],
+                                  description=config["artifacts"]["data"]["description"])
         artifact.add_reference("file://" + str(zip_dir))
         run.log_artifact(artifact)
