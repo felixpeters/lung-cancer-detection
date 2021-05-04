@@ -132,7 +132,7 @@ def get_nod_meta(scan: pl.Scan, cluster: List[pl.Annotation], index: int, bbox: 
         scan (pl.Scan): Scan in which the nodule was detected.
         cluster (List[pl.Annotation]): List of annotations for this nodule (typically derived from the pylidc.scan.cluster_annotations method)
         index (int): The index of the given nodule in this scan.
-        bbox (Tuple[slice]): Bounding box of the given nodule (typically derived from pylidc.utils.consensus function). 
+        bbox (Tuple[slice]): Bounding box of the given nodule (typically derived from pylidc.utils.consensus function).
 
     Returns:
         Dict[str, Any]: A dictionary containing the metadata.
@@ -207,12 +207,33 @@ def split_lidc(meta_path: Path, val_split: float = 0.2, seed: int = 47) -> Dict[
         Dict[str, List[str]]: Dictionary containg patient IDs for training and
         validation sets.
     """
-    df = pd.read_csv(meta_path, index_col="PatientID")
-    pids = list(df.index)
-    train_pids, val_pids = train_test_split(
+    scans = pd.read_csv(meta_path/"scans.csv", index_col="PatientID")
+    nods = pd.read_csv(meta_path/"nodules.csv", index_col="PatientID")
+    pids = list(scans.index)
+    train_pids, valid_pids = train_test_split(
         pids, test_size=val_split, random_state=seed, shuffle=True)
-    res = {
-        "training": train_pids,
-        "validation": val_pids,
-    }
-    return res
+    train_dict = [{
+        "pid": pid,
+        "image": f"images/{pid}.npy",
+        "mask": f"masks/{pid}.npy",
+        "nodules": [{
+            "nid": nid,
+            "image": f"nodules/{pid}_{nid}.npy",
+            "malignancy": mal,
+        } for nid, mal in
+            zip(list(nods.query(f"PatientID == '{pid}'").NoduleID),
+                list(nods.query(f"PatientID == '{pid}'").Malignancy))],
+    } for pid in train_pids]
+    valid_dict = [{
+        "pid": pid,
+        "image": f"images/{pid}.npy",
+        "mask": f"masks/{pid}.npy",
+        "nodules": [{
+            "nid": nid,
+            "image": f"nodules/{pid}_{nid}.npy",
+            "malignancy": mal,
+        } for nid, mal in
+            zip(list(nods.query(f"PatientID == '{pid}'").NoduleID),
+                list(nods.query(f"PatientID == '{pid}'").Malignancy))],
+    } for pid in valid_pids]
+    return train_dict, valid_dict

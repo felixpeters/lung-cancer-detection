@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 import yaml
@@ -15,3 +16,15 @@ def load_config(path: Path) -> dict:
     with open(path) as fp:
         config = yaml.safe_load(fp)
     return config
+
+
+def save_json(path: Path, data: dict):
+    """Save dictionary to given file in JSON format.
+
+    Args:
+        path (Path): Path to JSON file
+        data (dict): Data to save
+    """
+    with open(path, "w") as fp:
+        json.dump(data, fp, indent=4)
+    return

@@ -2,16 +2,22 @@ random_seed: 47
 wandb:
   offline: False
   project: "lung-cancer-detection"
-  tags:
-    - nodule-segmentation
-    - nodule-classification
-    - baseline
 artifacts:
   data:
     name: lidc-idri-raw
     version: v1
     type: dataset
     description: "Zipped dataset of all chest CT scans, masks and nodule volumes in npy format, including scan and nodule metadata"
+  train:
+    name: lidc-train
+    version: v1
+    type: dataset
+    description: "List of patient IDs included in the training set"
+  valid:
+    name: lidc-valid
+    version: v1
+    type: dataset
+    description: "List of patient IDs included in the validation set"
   seg_model:
     name: nodule-segmentation-model
     version: v1
