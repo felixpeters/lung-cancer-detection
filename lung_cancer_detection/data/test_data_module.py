@@ -1,9 +1,9 @@
 from pathlib import Path
 
-import pytest
 import numpy as np
+import pytest
 
-from .data_module import LIDCDataModule
+from .data_module import SegmentationDataModule
 
 
 @pytest.fixture(scope="session")
@@ -14,7 +14,8 @@ def data_dir():
 
 @pytest.fixture(scope="session")
 def data_module(data_dir):
-    data_module = LIDCDataModule(data_dir, data_dir/"cache", batch_size=2)
+    data_module = SegmentationDataModule(
+        data_dir, data_dir/"cache", batch_size=2)
     data_module.setup()
     return data_module
 

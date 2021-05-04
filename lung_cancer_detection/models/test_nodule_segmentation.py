@@ -1,10 +1,11 @@
 from pathlib import Path
 
-from .nodule_segmentation import NoduleSegmentationUNet
-from ..data.data_module import LIDCDataModule
-from ..data.test_data_module import data_module, data_dir, train_loader, val_loader
-
 import pytest
+
+from ..data.data_module import SegmentationDataModule
+from ..data.test_data_module import (data_dir, data_module, train_loader,
+                                     val_loader)
+from .nodule_segmentation import NoduleSegmentationUNet
 
 
 @pytest.fixture(scope="session")

@@ -14,7 +14,7 @@ from torch.utils.data import DataLoader
 from .image_reader import LIDCReader
 
 
-class LIDCDataModule(pl.LightningDataModule):
+class SegmentationDataModule(pl.LightningDataModule):
 
     def __init__(self, data_dir: Path, cache_dir: Path, batch_size: int,
                  val_split: float = 0.2, spacing: Sequence[int] = (1.5, 1.5, 2.0),
