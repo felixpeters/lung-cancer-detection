@@ -2,16 +2,23 @@ random_seed: 47
 wandb:
   offline: False
   project: "lung-cancer-detection"
-  tags:
-    - nodule-segmentation
-    - testing
 artifacts:
-  seg_data_artifact:
-    name: lidc-idri-cts
+  data:
+    name: lidc-idri-raw
     version: v0
     type: dataset
-    description: "Ten chest CT scans from LIDC-IDRI dataset including metadata"
-  seg_model_artifact:
+    description: "Zipped dataset of ten chest CT scans, masks and nodule volumes in npy format, including scan and nodule metadata"
+  train:
+    name: lidc-train
+    version: v0
+    type: dataset
+    description: "List of scans and nodules to be used for training models"
+  valid:
+    name: lidc-valid
+    version: v0
+    type: dataset
+    description: "List of scans and nodules to be used for validating models"
+  seg_model:
     name: nodule-segmentation-model
     version: v0
     type: model
@@ -19,8 +26,10 @@ artifacts:
 data:
   raw_dir: /Volumes/LaCie/data/lung-cancer-detection/lidc-idri/LIDC-IDRI/
   data_dir: data/test/
+  zip_dir: data/compressed/
+  split_dir: data/splits/
   cache_dir: data/cache/
-  sample_size: False
+  sample_size: 10
   batch_size: 2
   val_split: 0.2
 seg_model:

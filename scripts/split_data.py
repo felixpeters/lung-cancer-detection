@@ -46,8 +46,8 @@ if __name__ == "__main__":
                          ":" + config["artifacts"]["data"]["version"])
 
     print("Splitting raw LIDC-IDRI data into training and validation sets...")
-    train, valid = split_dir(data_dir / "meta/scans.csv",
-                             val_split=config["data"]["val_split"], seed=config["random_seed"])
+    train, valid = split_dir(
+        data_dir / "meta", val_split=config["data"]["val_split"], seed=config["random_seed"])
     train_file = split_dir / "train.json"
     save_json(train_file, train)
     val_file = split_dir / "valid.json"
