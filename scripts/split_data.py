@@ -4,8 +4,8 @@ from pathlib import Path
 
 import wandb
 import yaml
-from lung-cancer-detection.utils import save_json
 from lung_cancer_detection.data.preprocessing import split_lidc
+from lung_cancer_detection.utils import save_json
 
 warnings.filterwarnings("ignore")
 
@@ -31,8 +31,9 @@ if __name__ == "__main__":
 
     data_dir = Path(config["data"]["data_dir"]).absolute()
     split_dir = Path(config["data"]["split_dir"]).absolute()
+    split_dir.mkdir(parents=True, exist_ok=True)
     print("CONFIGURATION:")
-    print(f"Data directory: {dest_dir}")
+    print(f"Data directory: {data_dir}")
     print(f"Split directory: {split_dir}")
 
     if args.version:
@@ -46,8 +47,9 @@ if __name__ == "__main__":
                          ":" + config["artifacts"]["data"]["version"])
 
     print("Splitting raw LIDC-IDRI data into training and validation sets...")
-    train, valid = split_dir(
+    train, valid = split_lidc(
         data_dir / "meta", val_split=config["data"]["val_split"], seed=config["random_seed"])
+    print("Saving training and validation in JSON format...")
     train_file = split_dir / "train.json"
     save_json(train_file, train)
     val_file = split_dir / "valid.json"
