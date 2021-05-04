@@ -1,29 +1,34 @@
+import math
 import os
-from pathlib import Path
-from typing import List, Dict, Any, Tuple
 from functools import reduce
+from pathlib import Path
 from statistics import median_high
+from typing import Any, Dict, List, Tuple
 
-import pandas as pd
 import numpy as np
-from tqdm import tqdm
-from pylidc.utils import consensus
-import pylidc as pl
+import pandas as pd
 import pydicom as dicom
+import pylidc as pl
+from pylidc.utils import consensus
+from tqdm import tqdm
 
 
-def preprocess_lidc(src: Path, dest: Path, sample_size: int = False):
+def preprocess_lidc(src: Path, dest: Path, sample_size: int = False, nod_size:
+                    Tuple[int] = (100, 100, 60)):
     """Preprocesses the LIDC-IDRI dataset after being downloaded from TCIA.
 
     Args:
         src (Path): Path to directory where the DICOM folders reside.
         dest (Path): Path to which volumes, masks and metadata should be written.
         sample_size (int): Sample size. Mainly used for testing. Defaults to False
+        nod_size (Tuple[int]): Size of extracted nodule volumes. Defaults to (100, 100, 60) pixels.
     """
     img_path = dest / "images"
     img_path.mkdir(parents=True, exist_ok=True)
     mask_path = dest / "masks"
     mask_path.mkdir(parents=True, exist_ok=True)
+    nod_path = dest / "nodules"
+    nod_path.mkdir(parents=True, exist_ok=True)
     meta_path = dest / "meta"
     meta_path.mkdir(parents=True, exist_ok=True)
 
@@ -44,9 +49,16 @@ def preprocess_lidc(src: Path, dest: Path, sample_size: int = False):
         masks = [np.zeros(vol.shape, dtype=np.uint8)]
 
         for i, cluster in enumerate(ann_clusters):
+            # pad whole image for segmentation mask
             pad_sz = int(np.max(vol.shape))
             _, bbox = consensus(cluster, ret_masks=False)
             mask, _ = consensus(cluster, ret_masks=False, pad=pad_sz)
+            # calc padding for nodule volume
+            nod_pad_sz = [(math.ceil(i/2), math.floor(i/2)) for i in
+                          (np.array(nod_size) - np.array(vol[bbox].shape))]
+            _, pbbox = consensus(cluster, ret_masks=False, pad=nod_pad_sz)
+            nod_vol = vol[pbbox]
+            np.save(nod_path/f"{pid}_{i}.npy", nod_vol.astype(np.int16))
             nod_meta = get_nod_meta(scan, cluster, i, bbox)
             nod_data.append(nod_meta)
             masks.append(mask)

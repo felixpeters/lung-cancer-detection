@@ -18,30 +18,38 @@ if __name__ == "__main__":
         type=lambda p: Path(p).absolute(),
         default=Path(__file__).absolute().parents[1] / "configs/baseline.yaml",
         help="Path to configuration file")
+    parser.add_argument(
+        '--version',
+        type=bool,
+        default=True,
+        help="Version data artifact in Weights & Biases",
+    )
     args = parser.parse_args()
 
     with open(args.config, 'r') as stream:
         config = yaml.safe_load(stream)
 
-    preprocess_lidc()
-
     src_dir = Path(config["data"]["raw_dir"]).absolute()
     dest_dir = Path(config["data"]["data_dir"]).absolute()
     zip_dir = Path(config["data"]["zip_dir"]).absolute()
+    sample_sz = config["data"]["sample_size"]
     print("CONFIGURATION:")
     print(f"Source directory: {src_dir}")
     print(f"Destination directory: {dest_dir}")
     print(f"Archive directory: {zip_dir}")
+    print(f"Sample size: {sample_sz}")
 
-    preprocess_lidc(src_dir, dest_dir,
-                    sample_size=config["data"]["sample_size"])
+    print("Start preprocessing of raw DICOM files...")
+    preprocess_lidc(src_dir, dest_dir, sample_size=sample_sz)
 
-    shutil.make_archive(zip_dir/"segmentation", "zip", dest_dir)
+    print("Start compressing processed data files...")
+    shutil.make_archive(zip_dir/"processed", "zip", dest_dir)
 
-    run = wandb.init(project=config["wandb"]["project"],
-                     job_type="preprocessing", tags=config["wandb"]["tags"])
-    artifact = wandb.Artifact(config["artifacts"]["seg_data_artifact"]["name"],
-                              type=config["artifacts"]["seg_data_artifact"]["type"],
-                              description=config["artifacts"]["seg_data_artifact"]["description"])
-    artifact.add_reference("file://" + str(zip_dir))
-    run.log_artifact(artifact)
+    if args.version:
+        run = wandb.init(project=config["wandb"]["project"],
+                         job_type="preprocessing", tags=config["wandb"]["tags"])
+        artifact = wandb.Artifact(config["artifacts"]["seg_data_artifact"]["name"],
+                                  type=config["artifacts"]["seg_data_artifact"]["type"],
+                                  description=config["artifacts"]["seg_data_artifact"]["description"])
+        artifact.add_reference("file://" + str(zip_dir))
+        run.log_artifact(artifact)

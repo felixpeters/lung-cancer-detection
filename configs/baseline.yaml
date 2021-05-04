@@ -9,7 +9,7 @@ artifacts:
   seg_data_artifact:
     name: lidc-idri-cts
     version: v1
-    description: "Zipped dataset of chest CT scans and masks in npy format, including scan and nodule metadata"
+    description: "Zipped dataset of ten chest CT scans and masks in npy format, including scan and nodule metadata"
   seg_model_artifact:
     name: nodule-segmentation-model
     version: v1
@@ -17,10 +17,10 @@ artifacts:
     description: "Basic UNet for segmenting lung nodules in chest CTs"
 data:
   raw_dir: /Volumes/LaCie/data/lung-cancer-detection/lidc-idri/LIDC-IDRI/
-  data_dir: /Volumes/LaCie/data/lung-cancer-detection/lidc-idri/processed/segmentation/
-  zip_dir: /Volumes/LaCie/data/lung-cancer-detection/lidc-idri/processed/segmentation_compressed/
+  data_dir: /Volumes/LaCie/data/lung-cancer-detection/lidc-idri/processed/
+  zip_dir: /Volumes/LaCie/data/lung-cancer-detection/lidc-idri/compressed/
   cache_dir: /Volumes/LaCie/data/lung-cancer-detection/lidc-idri/cache/
-  sample_size: False
+  sample_size: 10
   batch_size: 32
   val_split: 0.2
 seg_model:
