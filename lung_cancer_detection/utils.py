@@ -28,3 +28,16 @@ def save_json(path: Path, data: dict):
     with open(path, "w") as fp:
         json.dump(data, fp, indent=4)
     return
+
+
+def load_json(path: Path) -> dict:
+    """Load data from JSON file as dictionary.
+
+    Args:
+        path (Path): Path to JSON file
+    Returns:
+        dict: Dictionary containing data
+    """
+    with open(path) as fp:
+        data = json.load(fp)
+    return data

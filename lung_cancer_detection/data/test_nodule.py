@@ -20,7 +20,7 @@ def splits(data_dir):
 @pytest.fixture(scope="session")
 def class_dm(data_dir, splits):
     dm = ClassificationDataModule(
-        data_dir, data_dir/"cache", splits, roi_size=[50, 50, 30], batch_size=4)
+        data_dir, data_dir/"cache", splits, batch_size=4)
     dm.setup()
     return dm
 
@@ -50,7 +50,7 @@ def test_setup(class_dm):
     label = item["label"].numpy()
     affine = item["image_meta_dict"]["affine"]
     assert len(img.shape) == 4
-    #assert list(img.shape) == [1, 50, 50, 30]
+    assert list(img.shape) == [1, 40, 40, 30]
     assert label.shape == (1,)
     assert np.all(img >= 0.0) == True
     assert np.all(img <= 1.0) == True
@@ -61,7 +61,14 @@ def test_setup(class_dm):
 
 def test_train_dataloader(class_tl):
     assert len(class_tl) == 5
+    for batch in class_tl:
+        assert batch["image"].numpy().shape == (4, 1, 40, 40, 30)
 
 
 def test_val_dataloader(class_vl):
     assert len(class_vl) == 2
+    for i, batch in enumerate(class_vl):
+        if i == 0:
+            assert batch["image"].numpy().shape == (4, 1, 40, 40, 30)
+        else:
+            assert batch["image"].numpy().shape == (1, 1, 40, 40, 30)
