@@ -17,7 +17,7 @@ from .image_reader import LIDCReader
 class SegmentationDataModule(pl.LightningDataModule):
 
     def __init__(self, data_dir: Path, cache_dir: Path, batch_size: int,
-                 val_split: float = 0.2, spacing: Sequence[int] = (1.5, 1.5, 2.0),
+                 val_split: float = 0.2, spacing: Sequence[float] = (1.5, 1.5, 2.0),
                  roi_size: Sequence[int] = [180, 180, 90], seed: int = 47, **kwargs):
         """Module that deals with preparation of the LIDC dataset for training segmentation models.
 
