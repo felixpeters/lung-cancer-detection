@@ -19,11 +19,12 @@ if __name__ == "__main__":
         default=Path(__file__).absolute().parents[1] / "configs/baseline.yaml",
         help="Path to configuration file")
     parser.add_argument(
-        '--version',
-        type=bool,
-        default=True,
-        help="Version data artifacts in Weights & Biases",
+        '--no-version',
+        dest="version",
+        action="store_false",
+        help="Skip versioning data artifacts in Weights & Biases",
     )
+    parser.set_defaults(version=True)
     args = parser.parse_args()
 
     with open(args.config, 'r') as stream:

@@ -1,4 +1,4 @@
-random_seed: 47
+random_seed: 5
 wandb:
   offline: False
   project: "lung-cancer-detection"

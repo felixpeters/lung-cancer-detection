@@ -1,0 +1,40 @@
+[
+    {
+        "pid": "LIDC-IDRI-0934",
+        "image": "images/LIDC-IDRI-0934.npy",
+        "mask": "masks/LIDC-IDRI-0934.npy",
+        "nodules": []
+    },
+    {
+        "pid": "LIDC-IDRI-0447",
+        "image": "images/LIDC-IDRI-0447.npy",
+        "mask": "masks/LIDC-IDRI-0447.npy",
+        "nodules": [
+            {
+                "nid": 0,
+                "image": "nodules/LIDC-IDRI-0447_0.npy",
+                "malignancy": 3
+            },
+            {
+                "nid": 1,
+                "image": "nodules/LIDC-IDRI-0447_1.npy",
+                "malignancy": 5
+            },
+            {
+                "nid": 2,
+                "image": "nodules/LIDC-IDRI-0447_2.npy",
+                "malignancy": 1
+            },
+            {
+                "nid": 3,
+                "image": "nodules/LIDC-IDRI-0447_3.npy",
+                "malignancy": 2
+            },
+            {
+                "nid": 4,
+                "image": "nodules/LIDC-IDRI-0447_4.npy",
+                "malignancy": 2
+            }
+        ]
+    }
+]
