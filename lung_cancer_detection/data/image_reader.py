@@ -1,8 +1,8 @@
 from pathlib import Path
-from typing import Union, Sequence, Tuple, Dict, Any
+from typing import Any, Dict, Sequence, Tuple, Union
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 from monai.data.image_reader import ImageReader
 
 
@@ -19,9 +19,10 @@ class LIDCReader(ImageReader):
         ValueError: If `data_dir` does not have the structure specified above.
     """
 
-    def __init__(self, data_dir: Path):
+    def __init__(self, data_dir: Path, nodule_mode: bool = False):
         super().__init__()
         self.data_dir = data_dir
+        self.nodule_mode = nodule_mode
         df_path = data_dir / "meta/scans.csv"
         img_path = data_dir / "images"
         mask_path = data_dir / "masks"
@@ -60,7 +61,10 @@ class LIDCReader(ImageReader):
             raise ValueError(
                 "LIDCReader only supports individual npy files to be loaded.")
         img = np.load(self.data_dir/data)
-        pat_id = data.split("/")[1].split(".")[0]
+        if self.nodule_mode:
+            pat_id = data.split("/")[1].split(".")[0].split("_")[0]
+        else:
+            pat_id = data.split("/")[1].split(".")[0]
         meta = self.meta_df.loc[pat_id]
         return (img, meta)
 
