@@ -4,7 +4,7 @@ import pytest
 
 from ..data.scan import SegmentationDataModule
 from ..data.test_scan import data_dir, data_module, train_loader, val_loader
-from .nodule_segmentation import NoduleSegmentationUNet
+from .segmentation import NoduleSegmentationUNet
 
 
 @pytest.fixture(scope="session")
