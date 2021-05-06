@@ -23,6 +23,17 @@ class ClassificationDataModule(pl.LightningDataModule):
                  spacing: Sequence[float] = (1.5, 1.5, 2.0),
                  roi_size: Sequence[int] = [40, 40, 30],
                  seed: int = 47):
+        """Handles all things data related for classifying lung nodules from the LIDC-IDRI dataset. Adheres to the PyTorch Lightning DataModule interface.
+
+        Args:
+            data_dir (Path): Directory with preprocessed LIDC dataset, as outputted by `preprocess_data` script.
+            cache_dir (Path): Directory where deterministic transformations of input samples will be cached.
+            splits (Sequence[Dict]): Dictionaries containing metadata of training and validation sets. See `split_data` script for more information.
+            batch_size (int, optional): Batch size for training and validation. Defaults to 16.
+            spacing (Sequence[float], optional): Pixel spacing (in mm) that inputs will be transformed into. Defaults to (1.5, 1.5, 2.0).
+            roi_size (Sequence[int], optional): Shape that inputs will be transformed into. Defaults to [40, 40, 30].
+            seed (int, optional): Random seed for transformations etc. Defaults to 47.
+        """
         super().__init__()
         self.data_dir = data_dir
         self.cache_dir = cache_dir
@@ -66,6 +77,11 @@ class ClassificationDataModule(pl.LightningDataModule):
         return
 
     def setup(self, stage: Optional[str] = None):
+        """Creates persistent training and validation sets based on provided splits.
+
+        Args:
+            stage (Optional[str], optional): Stage (e.g., "fit", "eval") for more efficient setup. Defaults to None.
+        """
         set_determinism(seed=self.seed)
         if stage == "fit" or stage is None:
             train_scans, val_scans = self.splits
@@ -84,11 +100,21 @@ class ClassificationDataModule(pl.LightningDataModule):
             return
 
     def train_dataloader(self) -> DataLoader:
+        """Creates training data loader.
+
+        Returns:
+            DataLoader: PyTorch data loader
+        """
         return DataLoader(self.train_ds, batch_size=self.batch_size,
                           shuffle=True, num_workers=os.cpu_count(),
                           collate_fn=list_data_collate)
 
     def val_dataloader(self) -> DataLoader:
+        """Creates validation data loader.
+
+        Returns:
+            DataLoader: PyTorch data loader
+        """
         return DataLoader(self.val_ds, batch_size=self.batch_size,
                           shuffle=True, num_workers=os.cpu_count(),
                           collate_fn=list_data_collate)
