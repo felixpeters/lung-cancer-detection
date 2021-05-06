@@ -11,7 +11,7 @@ from monai.utils import set_determinism
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader
 
-from .image_reader import LIDCReader
+from .reader import LIDCReader
 
 
 class SegmentationDataModule(pl.LightningDataModule):

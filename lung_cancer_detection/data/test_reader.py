@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from .image_reader import LIDCReader
+from .reader import LIDCReader
 
 
 @pytest.fixture(scope="session")

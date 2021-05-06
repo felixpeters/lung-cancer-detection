@@ -10,7 +10,7 @@ from monai.transforms import (AddChanneld, CenterSpatialCropd, Compose,
 from monai.utils import set_determinism
 from torch.utils.data import DataLoader
 
-from .image_reader import LIDCReader
+from .reader import LIDCReader
 
 
 class ClassificationDataModule(pl.LightningDataModule):
