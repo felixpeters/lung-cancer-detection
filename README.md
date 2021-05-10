@@ -87,3 +87,5 @@ Setio, A. A. A., Traverso, A., de Bel, T., Berens, M. S. N., Bogaard, C. van den
 Svoboda, E. 2020. “Artificial Intelligence Is Improving the Detection of Lung Cancer,” Nature (587:7834), pp. S20–S22. (https://doi.org/10.1038/d41586-020-03157-9).
 
 Yu, K. H., Lee, T. L. M., Yen, M. H., Kou, S. C., Rosen, B., Chiang, J. H., and Kohane, I. S. 2020. “Reproducible Machine Learning Methods for Lung Cancer Detection Using Computed Tomography Images: Algorithm Development and Validation,” Journal of Medical Internet Research (22:8), pp. 1–11. (https://doi.org/10.2196/16709).
+
+Zhu, W., Liu, C., Fan, W., & Xie, X. (2018, March). Deeplung: Deep 3d dual path nets for automated pulmonary nodule detection and classification. In 2018 IEEE Winter Conference on Applications of Computer Vision (WACV) (pp. 673-681). IEEE.
