@@ -219,6 +219,7 @@ def split_lidc(meta_path: Path, val_split: float = 0.2, seed: int = 47) -> Dict[
         "nodules": [{
             "nid": nid,
             "image": f"nodules/{pid}_{nid}.npy",
+            "annotations": anns,
             "malignancy": mal,
         } for nid, anns, mal in
             zip(list(nods.query(f"PatientID == '{pid}'").NoduleID),
@@ -232,9 +233,11 @@ def split_lidc(meta_path: Path, val_split: float = 0.2, seed: int = 47) -> Dict[
         "nodules": [{
             "nid": nid,
             "image": f"nodules/{pid}_{nid}.npy",
+            "annotations": anns,
             "malignancy": mal,
-        } for nid, mal in
+        } for nid, anns, mal in
             zip(list(nods.query(f"PatientID == '{pid}'").NoduleID),
+                list(nods.query(f"PatientID == '{pid}'").NumAnnotations),
                 list(nods.query(f"PatientID == '{pid}'").Malignancy))],
     } for pid in valid_pids]
     return train_dict, valid_dict

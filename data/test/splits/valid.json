@@ -13,26 +13,31 @@
             {
                 "nid": 0,
                 "image": "nodules/LIDC-IDRI-0447_0.npy",
+                "annotations": 3,
                 "malignancy": 3
             },
             {
                 "nid": 1,
                 "image": "nodules/LIDC-IDRI-0447_1.npy",
+                "annotations": 4,
                 "malignancy": 5
             },
             {
                 "nid": 2,
                 "image": "nodules/LIDC-IDRI-0447_2.npy",
+                "annotations": 1,
                 "malignancy": 1
             },
             {
                 "nid": 3,
                 "image": "nodules/LIDC-IDRI-0447_3.npy",
+                "annotations": 1,
                 "malignancy": 2
             },
             {
                 "nid": 4,
                 "image": "nodules/LIDC-IDRI-0447_4.npy",
+                "annotations": 1,
                 "malignancy": 2
             }
         ]

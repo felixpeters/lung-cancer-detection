@@ -7,26 +7,31 @@
             {
                 "nid": 0,
                 "image": "nodules/LIDC-IDRI-0144_0.npy",
+                "annotations": 4,
                 "malignancy": 2
             },
             {
                 "nid": 1,
                 "image": "nodules/LIDC-IDRI-0144_1.npy",
+                "annotations": 4,
                 "malignancy": 3
             },
             {
                 "nid": 2,
                 "image": "nodules/LIDC-IDRI-0144_2.npy",
+                "annotations": 1,
                 "malignancy": 1
             },
             {
                 "nid": 3,
                 "image": "nodules/LIDC-IDRI-0144_3.npy",
+                "annotations": 4,
                 "malignancy": 2
             },
             {
                 "nid": 4,
                 "image": "nodules/LIDC-IDRI-0144_4.npy",
+                "annotations": 4,
                 "malignancy": 4
             }
         ]
@@ -39,26 +44,31 @@
             {
                 "nid": 0,
                 "image": "nodules/LIDC-IDRI-0379_0.npy",
+                "annotations": 4,
                 "malignancy": 3
             },
             {
                 "nid": 1,
                 "image": "nodules/LIDC-IDRI-0379_1.npy",
+                "annotations": 1,
                 "malignancy": 2
             },
             {
                 "nid": 2,
                 "image": "nodules/LIDC-IDRI-0379_2.npy",
+                "annotations": 4,
                 "malignancy": 1
             },
             {
                 "nid": 3,
                 "image": "nodules/LIDC-IDRI-0379_3.npy",
+                "annotations": 4,
                 "malignancy": 3
             },
             {
                 "nid": 4,
                 "image": "nodules/LIDC-IDRI-0379_4.npy",
+                "annotations": 2,
                 "malignancy": 3
             }
         ]
@@ -77,36 +87,43 @@
             {
                 "nid": 0,
                 "image": "nodules/LIDC-IDRI-0055_0.npy",
+                "annotations": 6,
                 "malignancy": 4
             },
             {
                 "nid": 1,
                 "image": "nodules/LIDC-IDRI-0055_1.npy",
+                "annotations": 4,
                 "malignancy": 4
             },
             {
                 "nid": 2,
                 "image": "nodules/LIDC-IDRI-0055_2.npy",
+                "annotations": 2,
                 "malignancy": 3
             },
             {
                 "nid": 3,
                 "image": "nodules/LIDC-IDRI-0055_3.npy",
+                "annotations": 1,
                 "malignancy": 3
             },
             {
                 "nid": 4,
                 "image": "nodules/LIDC-IDRI-0055_4.npy",
+                "annotations": 4,
                 "malignancy": 5
             },
             {
                 "nid": 5,
                 "image": "nodules/LIDC-IDRI-0055_5.npy",
+                "annotations": 1,
                 "malignancy": 3
             },
             {
                 "nid": 6,
                 "image": "nodules/LIDC-IDRI-0055_6.npy",
+                "annotations": 2,
                 "malignancy": 3
             }
         ]
@@ -119,6 +136,7 @@
             {
                 "nid": 0,
                 "image": "nodules/LIDC-IDRI-0001_0.npy",
+                "annotations": 4,
                 "malignancy": 5
             }
         ]
@@ -131,6 +149,7 @@
             {
                 "nid": 0,
                 "image": "nodules/LIDC-IDRI-0818_0.npy",
+                "annotations": 2,
                 "malignancy": 2
             }
         ]
@@ -143,6 +162,7 @@
             {
                 "nid": 0,
                 "image": "nodules/LIDC-IDRI-0626_0.npy",
+                "annotations": 3,
                 "malignancy": 2
             }
         ]

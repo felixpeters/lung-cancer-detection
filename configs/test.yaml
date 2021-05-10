@@ -10,12 +10,12 @@ artifacts:
     description: "Zipped dataset of ten chest CT scans, masks and nodule volumes in npy format, including scan and nodule metadata"
   train:
     name: lidc-train
-    version: v0
+    version: v2
     type: dataset
     description: "List of scans and nodules to be used for training models"
   valid:
     name: lidc-valid
-    version: v0
+    version: v2
     type: dataset
     description: "List of scans and nodules to be used for validating models"
   seg_model:
