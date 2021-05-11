@@ -6,6 +6,7 @@ nbs/lung_cancer_detection
 
 # Data
 data/processed
+data/compressed
 data/raw
 data/cache
 data/test/cache
