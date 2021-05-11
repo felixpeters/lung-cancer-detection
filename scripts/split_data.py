@@ -42,7 +42,6 @@ if __name__ == "__main__":
                          job_type="split", tags=[
             "nodule-segmentation",
             "nodule-classification",
-            "testing",
         ])
         run.use_artifact(config["artifacts"]["data"]["name"] +
                          ":" + config["artifacts"]["data"]["version"])

@@ -3,7 +3,7 @@ import os
 from functools import reduce
 from pathlib import Path
 from statistics import median_high
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, Sequence, Tuple, Union
 
 import numpy as np
 import pandas as pd
@@ -14,8 +14,8 @@ from sklearn.model_selection import train_test_split
 from tqdm import tqdm
 
 
-def preprocess_lidc(src: Path, dest: Path, sample_size: int = False, nod_size:
-                    Tuple[int] = (100, 100, 60)):
+def preprocess_lidc(src: Path, dest: Path, sample: Union[Sequence[str], bool] =
+                    False, nod_size: Tuple[int] = (100, 100, 60)):
     """Preprocesses the LIDC-IDRI dataset after being downloaded from TCIA.
 
     Args:
@@ -36,8 +36,8 @@ def preprocess_lidc(src: Path, dest: Path, sample_size: int = False, nod_size:
     pids = get_pids(src)
     scan_data = []
     nod_data = []
-    if sample_size:
-        pids = pids[:sample_size]
+    if sample:
+        pids = sample
 
     for pid in tqdm(pids):
         scan = get_scan(pid)
@@ -74,14 +74,14 @@ def preprocess_lidc(src: Path, dest: Path, sample_size: int = False, nod_size:
     return
 
 
-def get_pids(dir: Path) -> List[str]:
+def get_pids(dir: Path) -> Sequence[str]:
     """Extracts patient IDs from folder names in the given directory.
 
     Args:
         dir (Path): Source directory, typically 'LIDC-IDRI' folder when data is downloaded from TCIA.
 
     Returns:
-        List[str]: Array of patient IDs
+        Sequence[str]: Array of patient IDs
     """
     pids = [f for f in os.listdir(dir) if not f.startswith(
         '.') and not f.endswith('.csv')]
@@ -125,12 +125,12 @@ def get_scan_meta(scan: pl.Scan) -> Dict[str, Any]:
     return meta
 
 
-def get_nod_meta(scan: pl.Scan, cluster: List[pl.Annotation], index: int, bbox: Tuple[slice]) -> Dict[str, Any]:
+def get_nod_meta(scan: pl.Scan, cluster: Sequence[pl.Annotation], index: int, bbox: Tuple[slice]) -> Dict[str, Any]:
     """Extracts metadata from a given lung nodule.
 
     Args:
         scan (pl.Scan): Scan in which the nodule was detected.
-        cluster (List[pl.Annotation]): List of annotations for this nodule (typically derived from the pylidc.scan.cluster_annotations method)
+        cluster (Sequence[pl.Annotation]): List of annotations for this nodule (typically derived from the pylidc.scan.cluster_annotations method)
         index (int): The index of the given nodule in this scan.
         bbox (Tuple[slice]): Bounding box of the given nodule (typically derived from pylidc.utils.consensus function).
 
@@ -195,7 +195,7 @@ def get_dcm_meta(scan: pl.Scan) -> Dict[str, Any]:
     return meta
 
 
-def split_lidc(meta_path: Path, val_split: float = 0.2, seed: int = 47) -> Dict[str, List[str]]:
+def split_lidc(meta_path: Path, val_split: float = 0.2, seed: int = 47) -> Dict[str, Sequence[str]]:
     """Splits LIDC-IDRI dataset into training and validation sets by patient ID.
 
     Args:
@@ -204,7 +204,7 @@ def split_lidc(meta_path: Path, val_split: float = 0.2, seed: int = 47) -> Dict[
         seed (int): Random seed to use for splitting. Defaults to 47.
 
     Returns:
-        Dict[str, List[str]]: Dictionary containg patient IDs for training and
+        Dict[str, Sequence[str]]: Dictionary containg patient IDs for training and
         validation sets.
     """
     scans = pd.read_csv(meta_path/"scans.csv", index_col="PatientID")

@@ -7,7 +7,7 @@ artifacts:
     name: lidc-idri-raw
     version: v1
     type: dataset
-    description: "Zipped dataset of all chest CT scans, masks and nodule volumes in npy format, including scan and nodule metadata"
+    description: "Zipped dataset of all chest CT scans, masks and nodule volumes in npy format, including scan and nodule metadata. Updated with new volume size for nodules."
   train:
     name: lidc-train
     version: v1
@@ -29,7 +29,7 @@ data:
   zip_dir: /Volumes/LaCie/data/lung-cancer-detection/lidc-idri/compressed/
   split_dir: /Volumes/LaCie/data/lung-cancer-detection/lidc-idri/splits/
   cache_dir: /Volumes/LaCie/data/lung-cancer-detection/lidc-idri/cache/
-  sample_size: False
+  sample: False
   batch_size: 32
   val_split: 0.2
 seg_model:

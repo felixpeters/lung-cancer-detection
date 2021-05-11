@@ -10,12 +10,12 @@ artifacts:
     description: "Zipped dataset of ten chest CT scans, masks and nodule volumes in npy format, including scan and nodule metadata"
   train:
     name: lidc-train
-    version: v2
+    version: v0
     type: dataset
     description: "List of scans and nodules to be used for training models"
   valid:
     name: lidc-valid
-    version: v2
+    version: v0
     type: dataset
     description: "List of scans and nodules to be used for validating models"
   seg_model:
@@ -29,7 +29,17 @@ data:
   zip_dir: data/compressed/
   split_dir: data/test/splits/
   cache_dir: data/test/cache/
-  sample_size: 10
+  sample:
+    - LIDC-IDRI-0001
+    - LIDC-IDRI-0055
+    - LIDC-IDRI-0144
+    - LIDC-IDRI-0279
+    - LIDC-IDRI-0379
+    - LIDC-IDRI-0447
+    - LIDC-IDRI-0626
+    - LIDC-IDRI-0690
+    - LIDC-IDRI-0818
+    - LIDC-IDRI-0934
   batch_size: 2
   val_split: 0.2
 seg_model:
