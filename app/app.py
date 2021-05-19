@@ -66,7 +66,6 @@ def get_img_slice(img, z, window=(-600, 1500)):
     pil_img = Image.fromarray(np.uint8(cm.gray(img_slice)*255))
     return pil_img.convert('RGBA')
 
-
 @st.cache(allow_output_mutation=True)
 def get_nod_slice(img, window=(-600, 1500)):
     # clip pixel values to desired window
