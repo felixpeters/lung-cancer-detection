@@ -5,8 +5,8 @@ from typing import Dict, Optional, Sequence
 import pytorch_lightning as pl
 from monai.data import Dataset, PersistentDataset, list_data_collate
 from monai.transforms import (AddChanneld, CenterSpatialCropd, Compose,
-                              LoadImaged, ScaleIntensityd, Spacingd,
-                              SpatialPadd, ToTensord)
+                              LoadImaged, ScaleIntensityd, SelectItemsd,
+                              Spacingd, SpatialPadd, ToTensord)
 from monai.utils import set_determinism
 from torch.utils.data import DataLoader
 
@@ -19,6 +19,7 @@ class ClassificationDataModule(pl.LightningDataModule):
                  data_dir: Path,
                  cache_dir: Path,
                  splits: Sequence[Dict],
+                 target: str = "malignancy",
                  batch_size: int = 16,
                  spacing: Sequence[float] = (1.5, 1.5, 2.0),
                  roi_size: Sequence[int] = [40, 40, 30],
@@ -29,6 +30,7 @@ class ClassificationDataModule(pl.LightningDataModule):
             data_dir (Path): Directory with preprocessed LIDC dataset, as outputted by `preprocess_data` script.
             cache_dir (Path): Directory where deterministic transformations of input samples will be cached.
             splits (Sequence[Dict]): Dictionaries containing metadata of training and validation sets. See `split_data` script for more information.
+            target(str): Target variable, as denoted in splits dictionary.
             batch_size (int, optional): Batch size for training and validation. Defaults to 16.
             spacing (Sequence[float], optional): Pixel spacing (in mm) that inputs will be transformed into. Defaults to (1.5, 1.5, 2.0).
             roi_size (Sequence[int], optional): Shape that inputs will be transformed into. Defaults to [40, 40, 30].
@@ -42,11 +44,13 @@ class ClassificationDataModule(pl.LightningDataModule):
         self.spacing = spacing
         self.roi_size = roi_size
         self.seed = seed
+        self.target = target
         self.hparams = {
             "batch_size": self.batch_size,
             "spacing": self.spacing,
             "roi_size": self.roi_size,
             "seed": self.seed,
+            "target": self.target,
         }
         reader = LIDCReader(self.data_dir, nodule_mode=True)
         self.train_transforms = Compose([
@@ -58,6 +62,7 @@ class ClassificationDataModule(pl.LightningDataModule):
                         mode="constant"),
             CenterSpatialCropd(keys=["image"], roi_size=self.roi_size),
             ToTensord(keys=["image", "label"]),
+            SelectItemsd(keys=["image", "label"]),
         ])
         self.val_transforms = Compose([
             LoadImaged(keys=["image"], reader=reader),
@@ -68,6 +73,7 @@ class ClassificationDataModule(pl.LightningDataModule):
                         mode="constant"),
             CenterSpatialCropd(keys=["image"], roi_size=self.roi_size),
             ToTensord(keys=["image", "label"]),
+            SelectItemsd(keys=["image", "label"]),
         ])
         return
 
@@ -86,17 +92,19 @@ class ClassificationDataModule(pl.LightningDataModule):
         if stage == "fit" or stage is None:
             train_scans, val_scans = self.splits
             self.train_dicts = [
-                {"image": nod["image"], "label": nod["malignancy"]} for
+                {"image": nod["image"], "label": nod[self.target]} for
                 scan in train_scans for nod in scan["nodules"]
             ]
             self.val_dicts = [
-                {"image": nod["image"], "label": nod["malignancy"]} for
+                {"image": nod["image"], "label": nod[self.target]} for
                 scan in val_scans for nod in scan["nodules"]
             ]
             self.train_ds = PersistentDataset(
-                self.train_dicts, transform=self.train_transforms, cache_dir=self.cache_dir)
+                self.train_dicts, transform=self.train_transforms,
+                cache_dir=self.cache_dir)
             self.val_ds = PersistentDataset(
-                self.val_dicts, transform=self.val_transforms, cache_dir=self.cache_dir)
+                self.val_dicts, transform=self.val_transforms,
+                cache_dir=self.cache_dir)
             return
 
     def train_dataloader(self) -> DataLoader:
