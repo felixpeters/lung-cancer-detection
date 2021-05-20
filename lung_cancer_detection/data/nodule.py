@@ -1,12 +1,12 @@
 import os
 from pathlib import Path
-from typing import Dict, Optional, Sequence
+from typing import Dict, Optional, Sequence, Tuple
 
 import pytorch_lightning as pl
 from monai.data import Dataset, PersistentDataset, list_data_collate
 from monai.transforms import (AddChanneld, CenterSpatialCropd, Compose,
-                              LoadImaged, ScaleIntensityd, SelectItemsd,
-                              Spacingd, SpatialPadd, ToTensord)
+                              LoadImaged, MapLabelValued, ScaleIntensityd,
+                              SelectItemsd, Spacingd, SpatialPadd, ToTensord)
 from monai.utils import set_determinism
 from torch.utils.data import DataLoader
 
@@ -20,8 +20,10 @@ class ClassificationDataModule(pl.LightningDataModule):
                  cache_dir: Path,
                  splits: Sequence[Dict],
                  target: str = "malignancy",
-                 min_anns: int = 0,
-                 exclude_labels: Sequence[int] = [],
+                 min_anns: int = 3,
+                 exclude_labels: Sequence[int] = [3],
+                 label_mapping: Tuple[Sequence[int]] = (
+                     [1, 2, 4, 5], [0, 0, 1, 1]),
                  batch_size: int = 16,
                  spacing: Sequence[float] = (1.5, 1.5, 2.0),
                  roi_size: Sequence[int] = [40, 40, 30],
@@ -35,6 +37,7 @@ class ClassificationDataModule(pl.LightningDataModule):
             target (str): Target variable, as denoted in splits dictionary. Defaults to malignancy.
             min_anns (int): Minimum number of annotations required for including nodule. Defaults to 0.
             exclude_labels (Sequence[int]): Label values to exclude in dataset.
+            label_mapping (Tuple[Sequence[int]]): Label mapping for discretization.
             batch_size (int, optional): Batch size for training and validation. Defaults to 16.
             spacing (Sequence[float], optional): Pixel spacing (in mm) that inputs will be transformed into. Defaults to (1.5, 1.5, 2.0).
             roi_size (Sequence[int], optional): Shape that inputs will be transformed into. Defaults to [40, 40, 30].
@@ -51,6 +54,7 @@ class ClassificationDataModule(pl.LightningDataModule):
         self.target = target
         self.min_anns = min_anns
         self.exclude_labels = exclude_labels
+        self.label_mapping = label_mapping
         self.hparams = {
             "batch_size": self.batch_size,
             "spacing": self.spacing,
@@ -59,6 +63,7 @@ class ClassificationDataModule(pl.LightningDataModule):
             "target": self.target,
             "min_anns": self.min_anns,
             "exclude_labels": self.exclude_labels,
+            "label_mapping": self.label_mapping,
         }
         reader = LIDCReader(self.data_dir, nodule_mode=True)
         self.train_transforms = Compose([
@@ -69,6 +74,8 @@ class ClassificationDataModule(pl.LightningDataModule):
             SpatialPadd(keys=["image"], spatial_size=self.roi_size,
                         mode="constant"),
             CenterSpatialCropd(keys=["image"], roi_size=self.roi_size),
+            MapLabelValued(keys=["label"], orig_labels=self.label_mapping[0],
+                           target_labels=self.label_mapping[1]),
             ToTensord(keys=["image", "label"]),
             SelectItemsd(keys=["image", "label"]),
         ])
@@ -80,6 +87,8 @@ class ClassificationDataModule(pl.LightningDataModule):
             SpatialPadd(keys=["image"], spatial_size=self.roi_size,
                         mode="constant"),
             CenterSpatialCropd(keys=["image"], roi_size=self.roi_size),
+            MapLabelValued(keys=["label"], orig_labels=self.label_mapping[0],
+                           target_labels=self.label_mapping[1]),
             ToTensord(keys=["image", "label"]),
             SelectItemsd(keys=["image", "label"]),
         ])

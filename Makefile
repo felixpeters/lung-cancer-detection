@@ -6,3 +6,6 @@ run-image:
 
 upload-image:
 	docker push felixpeters/lung-cancer-detection:latest
+
+test:
+	rm -R data/test/cache && pytest
