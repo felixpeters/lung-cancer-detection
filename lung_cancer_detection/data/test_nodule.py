@@ -33,6 +33,14 @@ def class_dm_min_anns(data_dir, splits):
     return dm
 
 
+@pytest.fixture(scope="session")
+def class_dm_exclude_labels(data_dir, splits):
+    dm = ClassificationDataModule(
+        data_dir, data_dir/"cache", splits, exclude_labels=[3], batch_size=4)
+    dm.setup()
+    return dm
+
+
 @ pytest.fixture(scope="session")
 def class_tl(class_dm):
     loader = class_dm.train_dataloader()
@@ -81,3 +89,8 @@ def test_val_dataloader(class_vl):
 def test_annotation_filter(class_dm_min_anns):
     assert len(class_dm_min_anns.train_ds) == 16
     assert len(class_dm_min_anns.val_ds) == 2
+
+
+def test_label_filter(class_dm_exclude_labels):
+    assert len(class_dm_exclude_labels.train_ds) == 12
+    assert len(class_dm_exclude_labels.val_ds) == 4
