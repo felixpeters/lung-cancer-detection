@@ -26,12 +26,20 @@ def class_dm(data_dir, splits):
 
 
 @pytest.fixture(scope="session")
+def class_dm_min_anns(data_dir, splits):
+    dm = ClassificationDataModule(
+        data_dir, data_dir/"cache", splits, min_anns=2, batch_size=4)
+    dm.setup()
+    return dm
+
+
+@ pytest.fixture(scope="session")
 def class_tl(class_dm):
     loader = class_dm.train_dataloader()
     return loader
 
 
-@pytest.fixture(scope="session")
+@ pytest.fixture(scope="session")
 def class_vl(class_dm):
     loader = class_dm.val_dataloader()
     return loader
@@ -68,3 +76,8 @@ def test_val_dataloader(class_vl):
             assert batch["image"].numpy().shape == (4, 1, 40, 40, 30)
         else:
             assert batch["image"].numpy().shape == (1, 1, 40, 40, 30)
+
+
+def test_annotation_filter(class_dm_min_anns):
+    assert len(class_dm_min_anns.train_ds) == 16
+    assert len(class_dm_min_anns.val_ds) == 2

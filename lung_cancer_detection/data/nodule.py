@@ -20,6 +20,7 @@ class ClassificationDataModule(pl.LightningDataModule):
                  cache_dir: Path,
                  splits: Sequence[Dict],
                  target: str = "malignancy",
+                 min_anns: int = 0,
                  batch_size: int = 16,
                  spacing: Sequence[float] = (1.5, 1.5, 2.0),
                  roi_size: Sequence[int] = [40, 40, 30],
@@ -30,7 +31,8 @@ class ClassificationDataModule(pl.LightningDataModule):
             data_dir (Path): Directory with preprocessed LIDC dataset, as outputted by `preprocess_data` script.
             cache_dir (Path): Directory where deterministic transformations of input samples will be cached.
             splits (Sequence[Dict]): Dictionaries containing metadata of training and validation sets. See `split_data` script for more information.
-            target(str): Target variable, as denoted in splits dictionary.
+            target (str): Target variable, as denoted in splits dictionary. Defaults to malignancy.
+            min_anns (int): Minimum number of annotations required for including nodule. Defaults to 0.
             batch_size (int, optional): Batch size for training and validation. Defaults to 16.
             spacing (Sequence[float], optional): Pixel spacing (in mm) that inputs will be transformed into. Defaults to (1.5, 1.5, 2.0).
             roi_size (Sequence[int], optional): Shape that inputs will be transformed into. Defaults to [40, 40, 30].
@@ -45,12 +47,14 @@ class ClassificationDataModule(pl.LightningDataModule):
         self.roi_size = roi_size
         self.seed = seed
         self.target = target
+        self.min_anns = min_anns
         self.hparams = {
             "batch_size": self.batch_size,
             "spacing": self.spacing,
             "roi_size": self.roi_size,
             "seed": self.seed,
             "target": self.target,
+            "min_anns": self.min_anns,
         }
         reader = LIDCReader(self.data_dir, nodule_mode=True)
         self.train_transforms = Compose([
@@ -93,11 +97,11 @@ class ClassificationDataModule(pl.LightningDataModule):
             train_scans, val_scans = self.splits
             self.train_dicts = [
                 {"image": nod["image"], "label": nod[self.target]} for
-                scan in train_scans for nod in scan["nodules"]
+                scan in train_scans for nod in scan["nodules"] if nod["annotations"] >= self.min_anns
             ]
             self.val_dicts = [
                 {"image": nod["image"], "label": nod[self.target]} for
-                scan in val_scans for nod in scan["nodules"]
+                scan in val_scans for nod in scan["nodules"] if nod["annotations"] >= self.min_anns
             ]
             self.train_ds = PersistentDataset(
                 self.train_dicts, transform=self.train_transforms,
