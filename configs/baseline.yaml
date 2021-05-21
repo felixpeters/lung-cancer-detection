@@ -45,8 +45,17 @@ seg_model:
   norm:
     - instance
     - affine: True
+class_model:
+  spatial_dims: 3
+  in_channels: 1
+  out_channels: 2
+  lr: 0.0001
 experiment:
   max_epochs: 100
+  max_time:
+    hours: 12
   auto_lr_find: True
   gpus: -1
   auto_select_gpus: True
+  auto_scale_batch_size: True
+  overfit_batches: True

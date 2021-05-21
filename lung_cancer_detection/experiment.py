@@ -34,8 +34,8 @@ class Experiment:
             self.logger.experiment.use_artifact(input_artifact["name"] + ":" +
                                                 input_artifact["version"], type=input_artifact["type"])
 
-    def find_lr(self):
-        """Finds the optimal learning rate using the PyTorch Lightning tuner.
+    def find_params(self):
+        """Finds the optimal learning rate and batch size using the PyTorch Lightning tuner.
         """
         self.trainer.tune(self.model, datamodule=self.data)
         self.model.hparams.lr = self.model.lr
