@@ -21,7 +21,7 @@ def val_batch(val_loader):
 
 @pytest.fixture(scope="session")
 def seg_model():
-    model = NoduleSegmentationUNet(features=(4, 4, 8, 16, 32, 4))
+    model = NoduleSegmentationUNet(features=(2, 2, 4, 8, 16, 2))
     return model
 
 
