@@ -1,10 +1,10 @@
-build-image:
+build:
 	docker build -t felixpeters/lung-cancer-detection . -f docker/Dockerfile
 
-run-image:
-	docker run --name=lct-dev -it -v $(shell pwd):/code -v /Volumes/LaCie/data/lung-cancer-detection/lidc-idri:/data -p 8080:8080 felixpeters/lung-cancer-detection
+run:
+	docker run -it -v $(shell pwd):/code -v /Volumes/LaCie/data/lung-cancer-detection/lidc-idri/processed:/data -p 8080:8080 felixpeters/lung-cancer-detection
 
-upload-image:
+publish:
 	docker push felixpeters/lung-cancer-detection:latest
 
 test:
