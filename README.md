@@ -17,10 +17,30 @@ Integrating these research efforts into clinical applications is an active area 
 See the [Arterys Marketplace](https://marketplace.arterys.com/) for examples of lung cancer detection models, some of which are currently under review for FDA or CE approval.
 This project constitutes a design study of how a deep learning-based lung cancer detection app could look like.
 
-## Dataset
+## Data
 
-The LIDC-IDRI dataset is used for training all models.
-It can be accessed via the [Cancer Imaging Archive](https://wiki.cancerimagingarchive.net/display/Public/LIDC-IDRI).
+### LIDC-IDRI dataset
+
+This dataset contains 1010 chest CT scans (in DICOM format) containing 2625 nodules. Nodules are annotated by radiologists regarding their malignancy, measurements and additional characteristics (e.g., calcification, spiculation).
+The `lung_cancer_detection` package contains modules for reading and preprocessing images.
+The raw data can be downloaded from the [Cancer Imaging Archive](https://wiki.cancerimagingarchive.net/display/Public/LIDC-IDRI).
+
+## Models
+
+### Nodule classification
+
+**Model 1: Malignancy classification from tabular data**
+
+- Code: `nbs/14_Nodule_Classification_Tabular.ipynb`
+- Data:
+  - Source: Nodule metadata
+  - Filters: minimum three annotations, malignancy annotation is not "Indeterminate"
+  - Target: Binary classification (benign => labels 1, 2; malignant => labels 4, 5)
+  - Features: 11 in total (measurements and additional annotations)
+  - Split: 672 training examples, 75 test examples
+- Model:
+  - Type: Random Forest (scikit-learn defaults)
+  - Performance: 94.67% accuracy, 0.9895 AUC score (on test data)
 
 ## Roadmap
 
