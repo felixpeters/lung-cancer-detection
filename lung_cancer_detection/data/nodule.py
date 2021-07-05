@@ -1,4 +1,5 @@
 import os
+import random
 from pathlib import Path
 from typing import Dict, Optional, Sequence, Tuple
 
@@ -151,3 +152,14 @@ class ClassificationDataModule(pl.LightningDataModule):
     def test_dataloader(self):
         """Not needed in current library version.
         """
+        return
+
+    def query(self, split: str = "train", n: int = 20, labels: Sequence[int] =
+            None, sort: bool = True):
+        ds = self.train_ds if split == "train" else self.val_ds
+        if labels:
+            ds = [item for item in ds if int(item["label"]) in labels]
+        if n:
+            ds = ds[:n]
+        return ds
+        

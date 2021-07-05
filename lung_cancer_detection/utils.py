@@ -1,7 +1,9 @@
 import json
+import math
 from pathlib import Path
 
 import yaml
+import matplotlib.pyplot as plt
 
 
 def load_config(path: Path) -> dict:
@@ -41,3 +43,18 @@ def load_json(path: Path) -> dict:
     with open(path) as fp:
         data = json.load(fp)
     return data
+
+def preview_dataset(ds, z=None):
+    imgs_per_row = 6
+    nrows, ncols = math.ceil(len(ds)/imgs_per_row), imgs_per_row
+    plt.figure("dataset", (ncols*2.5, nrows*3))
+    for i, item in enumerate(ds, start=1):
+        img = item["image"].numpy()[0]
+        plt.subplot(nrows, ncols, i)
+        if z:
+            plt.imshow(img[:,:,z], cmap="gray")
+        else:
+            plt.imshow(img[:,:,int(img.shape[2]/2)], cmap="gray")
+        plt.title(f"label: {int(item['label'].numpy()[0])}")
+    plt.show()
+
