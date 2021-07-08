@@ -23,14 +23,14 @@ class NoduleClassificationModule(pl.LightningModule):
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         output = self.model(x)
-        return F.softmax(output)
+        return F.softmax(output, dim=1)
 
     def training_step(self, batch: Dict, batch_idx: int) -> torch.Tensor:
         x, y = batch["image"], batch["label"]
         y = y.squeeze().type(torch.LongTensor)
         output = self(x)
         loss = F.cross_entropy(output, y)
-        logits = F.softmax(output)
+        logits = F.softmax(output, dim=1)
         self.log("train_loss", loss)
         self.train_acc(logits, y)
         self.log("train_acc", self.train_acc)
@@ -42,7 +42,7 @@ class NoduleClassificationModule(pl.LightningModule):
         x, y = batch["image"], batch["label"]
         y = y.squeeze().type(torch.LongTensor)
         output = self(x)
-        logits = F.softmax(output)
+        logits = F.softmax(output, dim=1)
         loss = F.cross_entropy(output, y)
         self.log("val_loss", loss)
         self.val_acc(logits, y)

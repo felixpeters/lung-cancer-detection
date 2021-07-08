@@ -154,7 +154,7 @@ class ClassificationDataModule(pl.LightningDataModule):
         """
         return
 
-    def query(self, split: str = "train", n: int = 20, labels: Sequence[int] =
+    def query_by_label(self, split: str = "train", n: int = 20, labels: Sequence[int] =
             None, sort: bool = True):
         ds = self.train_ds if split == "train" else self.val_ds
         if labels:
