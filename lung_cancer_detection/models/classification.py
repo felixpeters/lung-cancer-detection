@@ -3,28 +3,27 @@ from typing import Dict
 import pytorch_lightning as pl
 import torch
 from torch.optim import Adam
+import torch.nn as nn
 from torch.nn import Softmax
-from monai.networks.nets import DenseNet    
 import torch.nn.functional as F
 import torchmetrics
 
 
-class NoduleClassificationDenseNet(pl.LightningModule):
+class NoduleClassificationModule(pl.LightningModule):
 
-    def __init__(self, spatial_dims: int = 3, in_channels: int = 1,
-            out_channels: int = 2, lr: float = 1e-4, **kwargs):
+    def __init__(self, model: nn.Module, num_classes: int = 2, lr: float = 1e-4, **kwargs):
         super().__init__()
-        self.model = DenseNet(spatial_dims=spatial_dims,
-                in_channels=in_channels, out_channels=out_channels, **kwargs)
+        self.model = model
         self.lr = lr
         self.train_acc = torchmetrics.Accuracy()
         self.val_acc = torchmetrics.Accuracy()
-        self.train_auc = torchmetrics.AUROC(num_classes=2)
-        self.val_auc = torchmetrics.AUROC(num_classes=2)
+        self.train_auc = torchmetrics.AUROC(num_classes=num_classes)
+        self.val_auc = torchmetrics.AUROC(num_classes=num_classes)
         self.save_hyperparameters()
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        return self.model(x)
+        output = self.model(x)
+        return F.softmax(output)
 
     def training_step(self, batch: Dict, batch_idx: int) -> torch.Tensor:
         x, y = batch["image"], batch["label"]
