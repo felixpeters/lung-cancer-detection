@@ -18,6 +18,11 @@ artifacts:
     version: v1
     type: dataset
     description: "List of patient IDs included in the validation set"
+  class_model:
+    name: nodule-classification-model
+    version: v0
+    type: model
+    description: "Basic DenseNet for classifying lung nodules regarding their malignancy"
   seg_model:
     name: nodule-segmentation-model
     version: v1
@@ -28,9 +33,9 @@ data:
   data_dir: /Volumes/LaCie/data/lung-cancer-detection/lidc-idri/processed/
   zip_dir: /Volumes/LaCie/data/lung-cancer-detection/lidc-idri/compressed/
   split_dir: /Volumes/LaCie/data/lung-cancer-detection/lidc-idri/splits/
-  cache_dir: /Volumes/LaCie/data/lung-cancer-detection/lidc-idri/cache/
+  cache_dir: ../data/cache
   sample: False
-  batch_size: 32
+  batch_size: 8
   val_split: 0.2
 seg_model:
   features:
@@ -46,6 +51,7 @@ seg_model:
     - instance
     - affine: True
 class_model:
+  num_classes: 2
   spatial_dims: 3
   in_channels: 1
   out_channels: 2
@@ -58,4 +64,3 @@ experiment:
   gpus: -1
   auto_select_gpus: True
   auto_scale_batch_size: True
-  overfit_batches: True
