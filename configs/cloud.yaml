@@ -33,8 +33,9 @@ data:
   split_dir: ../data/full/splits/
   cache_dir: ../data/full/cache
   sample: False
-  batch_size: 32
+  batch_size: 128
   val_split: 0.2
+  min_anns: 1
 seg_model:
   features:
     - 32
@@ -61,4 +62,4 @@ experiment:
   auto_lr_find: True
   gpus: -1
   auto_select_gpus: True
-  auto_scale_batch_size: True
+  auto_scale_batch_size: False

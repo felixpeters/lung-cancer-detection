@@ -25,13 +25,10 @@ def class_model():
     model = NoduleClassificationModule(net, num_classes=2)
     return model
 
-def test_should_output_logits(class_model, class_train_batch):
+def test_should_produce_output(class_model, class_train_batch):
     x, _ = class_train_batch["image"], class_train_batch["label"]
     output = class_model(x).detach().numpy()
     assert output.shape == (4, 2)
-    assert np.all(output >= 0.0) == True
-    assert np.all(output <= 1.0) == True
-    assert np.all(np.sum(output, axis=1) == 1.0) == True
 
 def test_should_output_training_loss(class_model, class_train_batch):
     loss = class_model.training_step(class_train_batch, 0)
