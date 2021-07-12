@@ -12,6 +12,9 @@ data/cache
 data/test/cache
 *.pickle
 
+# Models
+models/classification
+
 # Python
 __pycache__
 .pytest_cache

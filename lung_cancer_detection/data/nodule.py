@@ -168,7 +168,20 @@ class ClassificationDataModule(pl.LightningDataModule):
         return
 
     def query_by_label(self, split: str = "train", n: int = 20, labels: Sequence[int] =
-            None, sort: bool = True):
+            None, sort: bool = True) -> Dataset:
+        """Returns data sample containing nodules which match the given labels.
+
+        Args:
+            split (str): Data split to query. Defaults to training set.
+            n (int): Number of samples to return. Defaults to 20.
+            labels (Sequence[int]): Only return samples with given labels.
+            sort (bool): Whether to sort returned samples by label. Defaults to
+            true.
+
+        Returns:
+            Dataset: Dataset containing samples. Transformations depend on
+            which split was used.
+        """
         ds = self.train_ds if split == "train" else self.val_ds
         if labels:
             ds = [item for item in ds if int(item["label"]) in labels]
@@ -176,3 +189,31 @@ class ClassificationDataModule(pl.LightningDataModule):
             ds = ds[:n]
         return ds
         
+    def query_by_case(self, patient_id: str) -> Dataset:
+        """Return nodule volumes for one specific case.
+
+        Args:
+            patient_id (str): Patient ID of desired case.
+
+        Returns:
+            Dataset: Dataset containing case nodules.
+        """
+        train_cases, valid_cases = self.splits
+        train_pids = [case["pid"] for case in train_cases]
+        valid_pids = [case["pid"] for case in valid_cases]
+        if patient_id in train_pids:
+            data_dict = [
+                {"image": nod["image"], "label": nod[self.target]} for
+                case in train_cases if case["pid"] == patient_id for nod in case["nodules"]
+            ]
+        elif patient_id in valid_pids:
+            data_dict = [
+                {"image": nod["image"], "label": nod[self.target]} for
+                case in valid_cases if case["pid"] == patient_id for nod in case["nodules"]
+            ]
+        else:
+            raise ValueError("Case with given ID could not be found.")
+
+        return Dataset(data_dict, transform=self.val_transforms)
+
+

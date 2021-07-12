@@ -45,6 +45,11 @@ class NoduleClassificationModule(pl.LightningModule):
         self.log("val_acc", self.val_acc)
         return {"val_loss": loss}
 
+    def predict_step(self, batch: Dict, batch_idx: int, dataloader_idx: int = None) -> torch.Tensor:
+        x = batch["image"]
+        output = self(x)
+        return F.softmax(output, dim=1)
+
     def configure_optimizers(self) -> torch.optim.Optimizer:
         optimizer = Adam(self.model.parameters(), self.lr)
         return optimizer
