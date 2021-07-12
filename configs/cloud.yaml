@@ -33,7 +33,7 @@ data:
   split_dir: ../data/full/splits/
   cache_dir: ../data/full/cache
   sample: False
-  batch_size: 128
+  batch_size: 32
   val_split: 0.2
   min_anns: 1
 seg_model:
@@ -54,7 +54,7 @@ class_model:
   spatial_dims: 3
   in_channels: 1
   out_channels: 2
-  lr: 0.0001
+  lr: 0.00001
   dropout: 0.0
 experiment:
   max_epochs: 100
