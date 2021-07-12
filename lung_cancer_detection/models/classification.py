@@ -7,6 +7,7 @@ import torch.nn as nn
 from torch.nn import CrossEntropyLoss
 import torch.nn.functional as F
 import torchmetrics
+from captum.attr import IntegratedGradients
 
 
 class NoduleClassificationModule(pl.LightningModule):
@@ -49,6 +50,12 @@ class NoduleClassificationModule(pl.LightningModule):
         x = batch["image"]
         output = self(x)
         return F.softmax(output, dim=1)
+
+    def explain(self, x: torch.Tensor, target: int = 1) -> torch.Tensor:
+        ig = IntegratedGradients(self)
+        baseline = torch.zeros(x.shape)
+        attributions, _ = ig.attribute(x, baseline, target=target)
+        return attributions
 
     def configure_optimizers(self) -> torch.optim.Optimizer:
         optimizer = Adam(self.model.parameters(), self.lr)
