@@ -3,10 +3,11 @@ import random
 from pathlib import Path
 from typing import Dict, Optional, Sequence, Tuple
 
+import numpy as np
 import pytorch_lightning as pl
 from monai.data import Dataset, PersistentDataset, list_data_collate
 from monai.transforms import (AddChanneld, CenterSpatialCropd, Compose,
-                              LoadImaged, MapLabelValued, ScaleIntensityd,
+                              LoadImaged, MapLabelValued, RandAffined, ScaleIntensityd,
                               SelectItemsd, Spacingd, SpatialPadd, ToTensord)
 from monai.utils import set_determinism
 from torch.utils.data import DataLoader
@@ -28,6 +29,7 @@ class ClassificationDataModule(pl.LightningDataModule):
                  batch_size: int = 16,
                  spacing: Sequence[float] = (1.5, 1.5, 2.0),
                  roi_size: Sequence[int] = [40, 40, 30],
+                 aug_prob: float = 0.0,
                  seed: int = 47):
         """Handles all things data related for classifying lung nodules from the LIDC-IDRI dataset. Adheres to the PyTorch Lightning DataModule interface.
 
@@ -42,6 +44,7 @@ class ClassificationDataModule(pl.LightningDataModule):
             batch_size (int, optional): Batch size for training and validation. Defaults to 16.
             spacing (Sequence[float], optional): Pixel spacing (in mm) that inputs will be transformed into. Defaults to (1.5, 1.5, 2.0).
             roi_size (Sequence[int], optional): Shape that inputs will be transformed into. Defaults to [40, 40, 30].
+            aug_prob (float): Probability of applying random data augmentation. Defaults to 0.0.
             seed (int, optional): Random seed for transformations etc. Defaults to 47.
         """
         super().__init__()
@@ -56,6 +59,7 @@ class ClassificationDataModule(pl.LightningDataModule):
         self.min_anns = min_anns
         self.exclude_labels = exclude_labels
         self.label_mapping = label_mapping
+        self.aug_prob = aug_prob
         self.hparams = {
             "batch_size": self.batch_size,
             "spacing": self.spacing,
@@ -77,6 +81,15 @@ class ClassificationDataModule(pl.LightningDataModule):
             CenterSpatialCropd(keys=["image"], roi_size=self.roi_size),
             MapLabelValued(keys=["label"], orig_labels=self.label_mapping[0],
                            target_labels=self.label_mapping[1]),
+            RandAffined(
+                keys=["image"], 
+                spatial_size=self.roi_size,
+                prob=self.aug_prob, 
+                mode="bilinear", 
+                rotate_range=(np.pi/18, np.pi/18, np.pi/4),
+                scale_range=(0.1, 0.1, 0.1),
+                padding_mode="border",
+            ),
             ToTensord(keys=["image", "label"]),
             SelectItemsd(keys=["image", "label"]),
         ])
