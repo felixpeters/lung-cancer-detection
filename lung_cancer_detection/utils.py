@@ -90,7 +90,7 @@ def preview_explanations(inputs: torch.Tensor, attributions: torch.Tensor, z: in
         _, (ax_img, ax_exp) = plt.subplots(1, 2, figsize=(7.5, 6))
         ax_img.imshow(img[:,:,z], cmap="gray")
         ax_img.set_title("Input")
-        ax_exp.imshow(ig_arr[:,:,z], cmap="inferno")
+        ax_exp.imshow(ig_arr[:,:,z], cmap="copper")
         ax_exp.set_title("Heatmap")
         plt.show()
 
