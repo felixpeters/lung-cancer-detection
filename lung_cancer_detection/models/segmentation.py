@@ -3,7 +3,6 @@ import torch
 import torch.nn as nn
 from torch.nn.modules.loss import _Loss
 from torch.optim import Adam
-from monai.networks.nets import BasicUNet
 from monai.losses import DiceLoss
 from typing import Sequence, Union
 

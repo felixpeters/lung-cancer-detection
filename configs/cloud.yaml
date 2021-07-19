@@ -36,6 +36,7 @@ data:
   batch_size: 32
   val_split: 0.2
   min_anns: 1
+  aug_prob: 0.1
 seg_model:
   features:
     - 32
@@ -61,6 +62,6 @@ experiment:
   max_time:
     hours: 12
   auto_lr_find: True
-  gpus: -1
+  gpus: 1
   auto_select_gpus: True
   auto_scale_batch_size: False
