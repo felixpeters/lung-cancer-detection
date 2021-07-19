@@ -1,20 +1,10 @@
-import json
 from pathlib import Path
 
 import numpy as np
 import pytest
 
 from .nodule import ClassificationDataModule
-from .test_scan import data_dir
-
-
-@pytest.fixture(scope="session")
-def splits(data_dir):
-    with open(data_dir/"splits/train.json") as fp:
-        train_data = json.load(fp)
-    with open(data_dir/"splits/valid.json") as fp:
-        valid_data = json.load(fp)
-    return (train_data, valid_data)
+from .test_scan import data_dir, splits
 
 
 @pytest.fixture(scope="session")

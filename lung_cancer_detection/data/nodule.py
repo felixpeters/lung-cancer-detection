@@ -20,7 +20,7 @@ class ClassificationDataModule(pl.LightningDataModule):
     def __init__(self,
                  data_dir: Path,
                  cache_dir: Path,
-                 splits: Sequence[Dict],
+                 splits: Sequence[Sequence[Dict]],
                  target: str = "malignancy",
                  min_anns: int = 3,
                  exclude_labels: Sequence[int] = [3],

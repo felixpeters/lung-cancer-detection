@@ -1,12 +1,14 @@
 import os
 from pathlib import Path
-from typing import Optional, Sequence
+from typing import Optional, Sequence, Dict
 
 import pandas as pd
 import pytorch_lightning as pl
 from monai.data import Dataset, PersistentDataset, list_data_collate
 from monai.transforms import (AddChanneld, CenterSpatialCropd, Compose,
-                              LoadImaged, ScaleIntensityd, Spacingd, ToTensord)
+                              LoadImaged, RandCropByPosNegLabeld,
+                              ScaleIntensityd, SelectItemsd, Spacingd,
+                              SpatialPadd, ToTensord)
 from monai.utils import set_determinism
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader
@@ -16,9 +18,16 @@ from .reader import LIDCReader
 
 class SegmentationDataModule(pl.LightningDataModule):
 
-    def __init__(self, data_dir: Path, cache_dir: Path, batch_size: int,
-                 val_split: float = 0.2, spacing: Sequence[float] = (1.5, 1.5, 2.0),
-                 roi_size: Sequence[int] = [180, 180, 90], seed: int = 47, **kwargs):
+    def __init__(self, 
+            data_dir: Path, 
+            cache_dir: Path, 
+            splits: Sequence[Sequence[Dict]],
+            batch_size: int,
+            val_split: float = 0.2, 
+            spacing: Sequence[float] = (1.5, 1.5, 2.0),
+            crop_size: Sequence[int] = [48, 48, 36], 
+            roi_size: Sequence[int] = [192, 192, 144], 
+            seed: int = 47, **kwargs):
         """Module that deals with preparation of the LIDC dataset for training segmentation models.
 
         Args:
@@ -31,25 +40,32 @@ class SegmentationDataModule(pl.LightningDataModule):
         super().__init__()
         self.data_dir = data_dir
         self.cache_dir = cache_dir
+        self.splits = splits
         self.batch_size = batch_size
         self.val_split = val_split
         self.spacing = spacing
+        self.crop_size = crop_size
         self.roi_size = roi_size
         self.seed = seed
         reader = LIDCReader(data_dir)
         self.train_transforms = Compose([
             LoadImaged(keys=["image", "label"], reader=reader),
             AddChanneld(keys=["image", "label"]),
-            # TODO: Test different spacing configurations
             Spacingd(keys=["image", "label"], pixdim=self.spacing,
                      mode=("bilinear", "nearest")),
-            # TODO: Test different scaling methods
             ScaleIntensityd(keys=["image"]),
-            # TODO: Test different cropping methods
-            CenterSpatialCropd(keys=["image", "label"],
-                               roi_size=self.roi_size),
-            # TODO: Test data augmentation methods
+            RandCropByPosNegLabeld(
+                keys=["image", "label"],
+                label_key="label",
+                spatial_size=self.crop_size,
+                pos=1,
+                neg=1,
+                num_samples=2,
+                image_key="image",
+                image_threshold=0,
+                ),
             ToTensord(keys=["image", "label"]),
+            SelectItemsd(keys=["image", "label"]),
         ])
         self.val_transforms = Compose([
             LoadImaged(keys=["image", "label"], reader=reader),
@@ -57,14 +73,17 @@ class SegmentationDataModule(pl.LightningDataModule):
             Spacingd(keys=["image", "label"], pixdim=self.spacing,
                      mode=("bilinear", "nearest")),
             ScaleIntensityd(keys=["image"]),
-            CenterSpatialCropd(keys=["image", "label"],
-                               roi_size=self.roi_size),
+            SpatialPadd(keys=["image", "label"], spatial_size=self.roi_size,
+                        mode="constant"),
+            CenterSpatialCropd(keys=["image", "label"], roi_size=self.roi_size),
             ToTensord(keys=["image", "label"]),
+            SelectItemsd(keys=["image", "label"]),
         ])
         self.hparams = {
             "batch_size": self.batch_size,
             "val_split": self.val_split,
             "spacing": self.spacing,
+            "crop_size": self.crop_size,
             "roi_size": self.roi_size,
         }
         return
@@ -85,18 +104,15 @@ class SegmentationDataModule(pl.LightningDataModule):
         set_determinism(seed=self.seed)
 
         if stage == "fit" or stage is None:
-            train_idx, val_idx = train_test_split(
-                list(self.scans.index), test_size=self.val_split, random_state=self.seed, shuffle=True)
-            train_dicts = [
-                {"image": f"images/{idx}.npy", "label": f"masks/{idx}.npy"} for idx in train_idx
-            ]
-            val_dicts = [
-                {"image": f"images/{idx}.npy", "label": f"masks/{idx}.npy"} for idx in val_idx
-            ]
+            train_scans, val_scans = self.splits
+            self.train_dicts = [{"image": scan["image"], "label": scan["mask"]}
+                for scan in train_scans]
+            self.val_dicts = [{"image": scan["image"], "label": scan["mask"]}
+                for scan in val_scans]
             self.train_ds = PersistentDataset(
-                train_dicts, transform=self.train_transforms, cache_dir=self.cache_dir)
+                self.train_dicts, transform=self.train_transforms, cache_dir=self.cache_dir)
             self.val_ds = PersistentDataset(
-                val_dicts, transform=self.val_transforms, cache_dir=self.cache_dir)
+                self.val_dicts, transform=self.val_transforms, cache_dir=self.cache_dir)
         return
 
     def train_dataloader(self) -> DataLoader:
@@ -106,7 +122,8 @@ class SegmentationDataModule(pl.LightningDataModule):
             DataLoader: Data loader for model training
         """
         train_loader = DataLoader(
-            self.train_ds, batch_size=self.batch_size, shuffle=True, num_workers=os.cpu_count(), collate_fn=list_data_collate)
+            self.train_ds, batch_size=self.batch_size, shuffle=True, 
+            num_workers=os.cpu_count(), collate_fn=list_data_collate)
         return train_loader
 
     def val_dataloader(self) -> DataLoader:
@@ -116,7 +133,8 @@ class SegmentationDataModule(pl.LightningDataModule):
             DataLoader: Data loader for model validation
         """
         val_loader = DataLoader(
-            self.val_ds, batch_size=self.batch_size, num_workers=os.cpu_count())
+            self.val_ds, batch_size=self.batch_size,
+            num_workers=os.cpu_count(), collate_fn=list_data_collate)
         return val_loader
 
     def test_dataloader(self):

@@ -10,7 +10,7 @@ from typing import Sequence, Union
 
 class NoduleSegmentationUNet(pl.LightningModule):
 
-    def __init__(self, features: Sequence[int] = (32, 32, 64, 128, 256, 32), norm: Union[str, tuple] = ('instance', {'affine': True}), dropout: float = 0.0, lr: float = 1e-4):
+    def __init__(self, model: nn.Module, lr: float = 1e-4):
         """Creates a simple UNet for segmenting nodules in chest CTs. Defines its training and validation logic.
 
         Args:
@@ -20,7 +20,7 @@ class NoduleSegmentationUNet(pl.LightningModule):
             lr (float, optional): Initial learning rate. Defaults to 1e-4.
         """
         super().__init__()
-        self.model = BasicUNet(features=features, norm=norm, dropout=dropout)
+        self.model = model
         self.loss = DiceLoss(to_onehot_y=True, softmax=True)
         self.lr = lr
         self.save_hyperparameters()
