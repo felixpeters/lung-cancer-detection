@@ -8,4 +8,4 @@ publish:
 	docker push felixpeters/lung-cancer-detection:latest
 
 test:
-	rm -R data/test/cache && pytest
+	rm -R data/test/cache && pytest --disable-pytest-warnings

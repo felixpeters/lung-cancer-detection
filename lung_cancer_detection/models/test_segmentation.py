@@ -1,10 +1,11 @@
 from pathlib import Path
 
 import pytest
+from monai.networks.nets import BasicUNet
 
 from ..data.scan import SegmentationDataModule
-from ..data.test_scan import data_dir, data_module, train_loader, val_loader
-from .segmentation import NoduleSegmentationUNet
+from ..data.test_scan import data_dir, splits, data_module, train_loader, val_loader
+from .segmentation import NoduleSegmentationModel
 
 
 @pytest.fixture(scope="session")
@@ -21,7 +22,8 @@ def val_batch(val_loader):
 
 @pytest.fixture(scope="session")
 def seg_model():
-    model = NoduleSegmentationUNet(features=(2, 2, 4, 8, 16, 2))
+    backbone = BasicUNet(features=(2, 2, 4, 8, 16, 2))
+    model = NoduleSegmentationModel(backbone)
     return model
 
 
@@ -32,7 +34,7 @@ def test_init(seg_model):
 def test_forward(seg_model, train_batch):
     x, y = train_batch["image"], train_batch["label"]
     output = seg_model.forward(x)
-    assert output.detach().numpy().shape == (2, 2, 180, 180, 90)
+    assert output.detach().numpy().shape == (4, 2, 48, 48, 36)
 
 
 def test_training_step(seg_model, train_batch):

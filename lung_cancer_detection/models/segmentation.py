@@ -8,7 +8,7 @@ from monai.losses import DiceLoss
 from typing import Sequence, Union
 
 
-class NoduleSegmentationUNet(pl.LightningModule):
+class NoduleSegmentationModel(pl.LightningModule):
 
     def __init__(self, model: nn.Module, lr: float = 1e-4):
         """Creates a simple UNet for segmenting nodules in chest CTs. Defines its training and validation logic.
