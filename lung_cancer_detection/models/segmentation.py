@@ -13,9 +13,7 @@ class NoduleSegmentationModel(pl.LightningModule):
         """Creates a simple UNet for segmenting nodules in chest CTs. Defines its training and validation logic.
 
         Args:
-            features (Sequence[int], optional): Number of features in each layer. Defaults to (32, 32, 64, 128, 256, 32).
-            norm (Union[str, tuple], optional): Feature normalization type to use. Defaults to ('instance', {'affine': True}).
-            dropout (float, optional): Dropout ratio. Defaults to 0.0.
+            model: (nn.Module): Model to use for training.
             lr (float, optional): Initial learning rate. Defaults to 1e-4.
         """
         super().__init__()
