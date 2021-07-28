@@ -23,7 +23,6 @@ class SegmentationDataModule(pl.LightningDataModule):
             cache_dir: Path, 
             splits: Sequence[Sequence[Dict]],
             batch_size: int,
-            val_split: float = 0.2, 
             spacing: Sequence[float] = (1.5, 1.5, 2.0),
             crop_size: Sequence[int] = [48, 48, 36], 
             roi_size: Sequence[int] = [192, 192, 144], 
@@ -33,8 +32,12 @@ class SegmentationDataModule(pl.LightningDataModule):
         Args:
             data_dir (Path): Folder where preprocessed data is stored. See `LIDCReader` docs for expected structure.
             cache_dir (Path): Folder where deterministic data transformations should be cached.
+            splits (Sequence[Sequence[Dict]]): Data dictionaries for training
+            and validation split.
             batch_size (int): Number of training examples in each batch.
-            val_split (float, optional): Percentage of examples to set aside for validation. Defaults to 0.2.
+            spacing (Sequence[float]): Pixel and slice spacing. Defaults to 1.5x1.5x2mm.
+            crop_size (Sequence[int]): Size of crop that is used for training. Defaults to 48x48x36px.
+            roi_size (Sequence[int]): Size of crop that is used for validation. Defaults to 192x192x144px.
             seed (int, optional): Random seed used for deterministic sampling and transformations. Defaults to 47.
         """
         super().__init__()
